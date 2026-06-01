@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B00020"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvClosePlayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⌄"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imgPlayerCover"
+            android:layout_width="220dp"
+            android:layout_height="320dp"
+            android:layout_marginTop="28dp"
+            android:background="#DDE6EF"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tvPlayerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPlayerAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="#FFD7D7"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvPlayerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:textColor="#FFEAEA"
+            android:textSize="14sp" />
+
+        <SeekBar
+            android:id="@+id/seekAudio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/tvPlayPause"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:text="▶"
+            android:textColor="#142B4A"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>

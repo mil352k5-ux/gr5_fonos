@@ -28,6 +28,8 @@
         <activity android:name=".ExploreActivity" />
         <activity android:name=".LibraryActivity" />
         <activity android:name=".ChallengeActivity" />
+        <activity android:name=".BookDetailActivity" />
+        <activity android:name=".PlayerActivity" />
     </application>
 
 </manifest>

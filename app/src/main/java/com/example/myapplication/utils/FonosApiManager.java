@@ -223,6 +223,22 @@ public class FonosApiManager {
         }
     }
 
+    public void getFirstChapterByBookId(String bookId, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/audio_chapters?select=*&book_id=eq."
+                + bookId
+                + "&order=chapter_number.asc&limit=1";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                .addHeader("Authorization", "Bearer " + SupabaseConfig.SUPABASE_KEY)
+                .get()
+                .build();
+
+        sendRequest(request, callback);
+    }
+
     private void sendRequest(Request request, ApiCallback callback) {
         client.newCall(request).enqueue(new Callback() {
             @Override
