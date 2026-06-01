@@ -90,29 +90,15 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Featured Book -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="200dp"
-                android:layout_height="300dp"
-                android:layout_gravity="center"
-                app:cardCornerRadius="8dp">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@android:drawable/ic_menu_report_image" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="8dp"
-                    android:background="#E53935"
-                    android:padding="4dp"
-                    android:text="@string/best_seller"
-                    android:textColor="@android:color/white"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-            </androidx.cardview.widget.CardView>
+            <!-- Best Seller Carousel -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBestSellers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="32dp" />
 
             <TextView
                 android:layout_width="wrap_content"
