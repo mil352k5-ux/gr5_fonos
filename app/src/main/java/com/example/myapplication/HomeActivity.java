@@ -8,13 +8,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.adapter.BestSellerAdapter;
 import com.example.myapplication.adapter.BookAdapter;
 import com.example.myapplication.model.Book;
 import com.example.myapplication.utils.FonosApiManager;
 import com.example.myapplication.utils.SupabaseConfig;
 
+import com.bumptech.glide.Glide;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,9 +27,15 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     private FonosApiManager apiManager;
-    private RecyclerView rvBooks;
+    private RecyclerView rvBooks, rvBestSellers;
     private BookAdapter bookAdapter;
-    private List<Book> bookList;
+    private BestSellerAdapter bestSellerAdapter;
+    private List<Book> bookList, bestSellerList;
+    private String token = SupabaseConfig.SUPABASE_KEY;
+    private final int PAGE_SIZE = 12;
+    private int currentOffset = 0;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +45,30 @@ public class HomeActivity extends AppCompatActivity {
         apiManager = new FonosApiManager(this);
 
         rvBooks = findViewById(R.id.rvBooks);
+        rvBestSellers = findViewById(R.id.rvBestSellers);
+
         bookList = new ArrayList<>();
+        bestSellerList = new ArrayList<>();
 
         bookAdapter = new BookAdapter(bookList, book -> {
-            Intent intent = new Intent(HomeActivity.this, BookDetailActivity.class);
-            intent.putExtra("id", book.getId());
-            intent.putExtra("title", book.getTitle());
-            intent.putExtra("author", book.getAuthor());
-            intent.putExtra("description", book.getDescription());
-            intent.putExtra("category", book.getCategory());
-            intent.putExtra("cover_url", book.getCoverUrl());
-            startActivity(intent);
+            openBookDetail(book);
+        });
+
+        bestSellerAdapter = new BestSellerAdapter(bestSellerList, book -> {
+            openBookDetail(book);
         });
 
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
         rvBooks.setLayoutManager(layoutManager);
         rvBooks.setAdapter(bookAdapter);
+
+        LinearLayoutManager bestSellerLayoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvBestSellers.setLayoutManager(bestSellerLayoutManager);
+        rvBestSellers.setAdapter(bestSellerAdapter);
+
+        new LinearSnapHelper().attachToRecyclerView(rvBestSellers);
 
         Button btnUpgrade = findViewById(R.id.btnUpgrade);
         if (btnUpgrade != null) {
@@ -71,17 +86,75 @@ public class HomeActivity extends AppCompatActivity {
 
         setupBottomNavigation();
 
-        loadBooksFromSupabase();
+        loadBestSellerBook();
+        loadBooksPaged();
     }
 
-    private void loadBooksFromSupabase() {
-        apiManager.getBooks(SupabaseConfig.SUPABASE_KEY, new FonosApiManager.ApiCallback() {
+    private void openBookDetail(Book book) {
+        Intent intent = new Intent(HomeActivity.this, BookDetailActivity.class);
+        intent.putExtra("id", book.getId());
+        intent.putExtra("title", book.getTitle());
+        intent.putExtra("author", book.getAuthor());
+        intent.putExtra("description", book.getDescription());
+        intent.putExtra("category", book.getCategory());
+        intent.putExtra("cover_url", book.getCoverUrl());
+        startActivity(intent);
+    }
+
+    private void loadBestSellerBook() {
+        apiManager.getBestSellerBooks(token, 5, new FonosApiManager.ApiCallback() {
             @Override
             public void onSuccess(String responseBody) {
                 try {
                     JSONArray array = new JSONArray(responseBody);
 
-                    bookList.clear();
+                    bestSellerList.clear();
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject obj = array.getJSONObject(i);
+
+                        Book book = new Book(
+                                obj.optString("id", ""),
+                                obj.optString("title", "No title"),
+                                obj.optString("author", "Unknown author"),
+                                obj.optString("narrator", "Fonos Voice"),
+                                obj.optString("description", ""),
+                                obj.optString("category", "General"),
+                                obj.optString("cover_url", ""),
+                                obj.optInt("total_duration", 0),
+                                obj.optBoolean("is_premium", false)
+                        );
+                        bestSellerList.add(book);
+                    }
+
+                    bestSellerAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    Toast.makeText(HomeActivity.this, "Lỗi tải sách bán chạy", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(HomeActivity.this, "Không tải được bestseller", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadBooksPaged() {
+        if (isLoading || isLastPage) return;
+
+        isLoading = true;
+
+        apiManager.getBooksPaged(token, PAGE_SIZE, currentOffset, new FonosApiManager.ApiCallback() {
+            @Override
+            public void onSuccess(String responseBody) {
+                try {
+                    JSONArray array = new JSONArray(responseBody);
+
+                    if (array.length() < PAGE_SIZE) {
+                        isLastPage = true;
+                    }
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject obj = array.getJSONObject(i);
@@ -103,28 +176,19 @@ public class HomeActivity extends AppCompatActivity {
 
                     bookAdapter.notifyDataSetChanged();
 
-                    Toast.makeText(
-                            HomeActivity.this,
-                            "Đã tải " + bookList.size() + " sách",
-                            Toast.LENGTH_SHORT
-                    ).show();
+                    currentOffset += array.length();
+                    isLoading = false;
 
                 } catch (Exception e) {
-                    Toast.makeText(
-                            HomeActivity.this,
-                            "Lỗi parse books: " + e.getMessage(),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    isLoading = false;
+                    Toast.makeText(HomeActivity.this, "Lỗi đọc dữ liệu sách", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onError(String errorMessage) {
-                Toast.makeText(
-                        HomeActivity.this,
-                        "Lỗi tải sách: " + errorMessage,
-                        Toast.LENGTH_LONG
-                ).show();
+                isLoading = false;
+                Toast.makeText(HomeActivity.this, "Không tải được sách", Toast.LENGTH_SHORT).show();
             }
         });
     }
