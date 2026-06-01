@@ -16,9 +16,14 @@ import com.bumptech.glide.Glide;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
     private List<Book> books;
+    private OnBookClickListener listener;
 
-    public BookAdapter(List<Book> books) {
+    public interface OnBookClickListener {
+        void onBookClick(Book book);
+    }
+    public BookAdapter(List<Book> books, OnBookClickListener listener) {
         this.books = books;
+        this.listener = listener;
     }
 
     @Override
@@ -40,6 +45,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 .load(book.getCoverUrl())
                 .placeholder(android.R.drawable.ic_menu_report_image)
                 .into(holder.imgCover);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onBookClick(book);
+            }
+        });
     }
 
     @Override

@@ -38,7 +38,16 @@ public class HomeActivity extends AppCompatActivity {
         rvBooks = findViewById(R.id.rvBooks);
         bookList = new ArrayList<>();
 
-        bookAdapter = new BookAdapter(bookList);
+        bookAdapter = new BookAdapter(bookList, book -> {
+            Intent intent = new Intent(HomeActivity.this, BookDetailActivity.class);
+            intent.putExtra("id", book.getId());
+            intent.putExtra("title", book.getTitle());
+            intent.putExtra("author", book.getAuthor());
+            intent.putExtra("description", book.getDescription());
+            intent.putExtra("category", book.getCategory());
+            intent.putExtra("cover_url", book.getCoverUrl());
+            startActivity(intent);
+        });
 
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -122,16 +131,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupBottomNavigation() {
         findViewById(R.id.navBooks).setOnClickListener(v -> {
-            // Đã ở trang chủ/sách
+            // Đã ở trang Sách
         });
 
         findViewById(R.id.navExplore).setOnClickListener(v -> {
             startActivity(new Intent(this, ExploreActivity.class));
-            finish();
-        });
-
-        findViewById(R.id.navChallenge).setOnClickListener(v -> {
-            startActivity(new Intent(this, ChallengeActivity.class));
             finish();
         });
 
