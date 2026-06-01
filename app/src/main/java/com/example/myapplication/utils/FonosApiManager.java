@@ -16,6 +16,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 public class FonosApiManager {
 
     public interface ApiCallback {
@@ -194,6 +195,50 @@ public class FonosApiManager {
         sendRequest(request, callback);
     }
 
+    public void loginWithGoogleToken(String googleIdToken, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL + "/auth/v1/token?grant_type=id_token";
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("provider", "google");
+            json.put("id_token", googleIdToken);
+
+            RequestBody body = RequestBody.create(
+                    json.toString(),
+                    MediaType.parse("application/json")
+            );
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                    .addHeader("Authorization", "Bearer " + SupabaseConfig.SUPABASE_KEY)
+                    .addHeader("Content-Type", "application/json")
+                    .post(body)
+                    .build();
+
+            sendRequest(request, callback);
+
+        } catch (Exception e) {
+            callback.onError(e.getMessage());
+        }
+    }
+
+    public void getFirstChapterByBookId(String bookId, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/audio_chapters?select=*&book_id=eq."
+                + bookId
+                + "&order=chapter_number.asc&limit=1";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                .addHeader("Authorization", "Bearer " + SupabaseConfig.SUPABASE_KEY)
+                .get()
+                .build();
+
+        sendRequest(request, callback);
+    }
+
     private void sendRequest(Request request, ApiCallback callback) {
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -213,4 +258,5 @@ public class FonosApiManager {
             }
         });
     }
+
 }
