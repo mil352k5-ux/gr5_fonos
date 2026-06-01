@@ -98,6 +98,41 @@ public class FonosApiManager {
         sendRequest(request, callback);
     }
 
+    public void getBooksPaged(String token, int limit, int offset, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/books"
+                + "?select=*"
+                + "&limit=" + limit
+                + "&offset=" + offset
+                + "&order=created_at.desc";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                .addHeader("Authorization", "Bearer " + token)
+                .get()
+                .build();
+
+        sendRequest(request, callback);
+    }
+
+    public void getBestSellerBooks(String token, int limit, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/books"
+                + "?select=*"
+                + "&is_bestseller=eq.true"
+                + "&limit=" + limit;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                .addHeader("Authorization", "Bearer " + token)
+                .get()
+                .build();
+
+        sendRequest(request, callback);
+    }
+
     public void saveLibraryProgress(String token, String userId, String bookId, int progressSeconds, ApiCallback callback) {
         String url = SupabaseConfig.SUPABASE_URL + "/rest/v1/user_library";
 
