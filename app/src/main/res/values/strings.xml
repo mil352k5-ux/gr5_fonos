@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="registration_title">Registration Form</string>
+    <string name="registration_subtitle">Enter the Details for registration</string>
+    <string name="first_name_hint">First name</string>
+    <string name="last_name_hint">Last name</string>
+    <string name="email_hint">Enter your email</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+    <string name="dob_hint">Date of Birth</string>
+    <string name="select_date_button">SELECT DATE</string>
+    <string name="password_hint">password</string>
+    <string name="confirm_password_hint">confirm password</string>
+    <string name="privacy_policy_agree">Agree ? Privacy &amp; Policy</string>
+    <string name="register_button">REGISTER</string>
+
+    <!-- Login Redesign -->
+    <string name="login_form_title">Login Form</string>
+    <string name="email_username_hint">Email or Username</string>
+    <string name="login_button_caps">LOGIN</string>
+    <string name="or_login_with">Or login with</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="not_a_member">Not a member?</string>
+    <string name="signup_now">Signup now</string>
+
+    <!-- Fonos Common -->
+    <string name="fonos_nav_books">Books</string>
+    <string name="fonos_nav_podcourse">PodCourse</string>
+    <string name="fonos_nav_explore">Explore</string>
+    <string name="fonos_nav_challenge">Challenge</string>
+    <string name="fonos_nav_library">Library</string>
+    <string name="upgrade">Upgrade</string>
+
+    <!-- Fonos Home -->
+    <string name="tab_audiobooks">Audiobooks</string>
+    <string name="tab_ebook">Ebook</string>
+    <string name="tab_summary">Summary</string>
+    <string name="books_for_you_title">12 Audiobooks For You</string>
+    <string name="books_for_you_subtitle">Suitable for beginners – click to listen now</string>
+    <string name="best_seller">BEST SELLER</string>
+
+    <!-- Fonos Explore -->
+    <string name="explore_search_hint">Search book title, author, mentor...</string>
+    <string name="banner_podcourse_title">PodCourse – New Update</string>
+    <string name="banner_podcourse_desc">Members can now see more than 30 PodCourses on Fonos for free!</string>
+    <string name="cat_english_books">English Books</string>
+    <string name="cat_children">Children</string>
+    <string name="cat_meditation">Meditation</string>
+    <string name="cat_sleep_stories">Sleep Story &amp; Music</string>
+    <string name="cat_podcast">Podcast</string>
+
+    <!-- Fonos Library -->
+    <string name="lib_recent">Recent</string>
+    <string name="lib_purchased">Purchased</string>
+    <string name="lib_downloaded">Downloaded</string>
+    <string name="lib_favorites">Favorites</string>
+    <string name="lib_bookmarks">Bookmarks</string>
+    <string name="lib_empty_title">You haven\'t listened to any content yet</string>
+    <string name="lib_empty_subtitle">Let\'s start with a bestseller!</string>
+
+    <!-- PodCourse -->
+    <string name="pod_free_trial_title">Free Trial Membership</string>
+    <string name="pod_free_trial_desc">Fonos gives you 3 days of Premium for completely FREE to experience Membership.</string>
+    <string name="pod_find_out_more">Find out more</string>
+    <string name="pod_free_for_members">Free PodCourse For Members</string>
+    <string name="pod_instructor_tran">Tran Tien Cao Dang</string>
+    <string name="pod_course_title_1">Become a Professional Translator: From Passion to Success</string>
+
+    <!-- Challenge -->
+    <string name="challenge_title">Challenge</string>
+    <string name="challenge_rookie_cup">ROOKIE CUP</string>
+    <string name="challenge_time_left">06 DAYS LEFT</string>
+    <string name="challenge_rookie_desc">Complete 6 tasks below to receive the Cup and 1 FREE AUDIOBOOK.</string>
+    <string name="challenge_view_reward">View reward details</string>
+    <string name="task_listen_5min">Listen to Fonos for 5 minutes.</string>
+    <string name="task_explore_audiobooks">Explore Audiobooks</string>
+    <string name="task_login_3days">Access Fonos for 3 consecutive days.</string>
+    <string name="task_listen_60min">Listen to Fonos for 60 minutes.</string>
+
+    <!-- Old Login Strings (Keep for compatibility if needed) -->
+    <string name="login_title">Log in</string>
+    <string name="login_subtitle">to your account</string>
+    <string name="username_hint">username</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="social_login_title">Sign in</string>
+    <string name="social_login_subtitle">with one of your social profiles</string>
+    <string name="no_account_text">Dont have an account?</string>
+    <string name="sign_up">sign up</string>
+    <string name="or">or</string>
+    <string name="already_have_account">Already have an account? Login</string>
+</resources>
