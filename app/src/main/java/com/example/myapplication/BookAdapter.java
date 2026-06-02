@@ -1,4 +1,4 @@
-package com.example.myapplication.adapter;
+package com.example.myapplication;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +40,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.tvTitle.setText(book.getTitle());
         holder.tvAuthor.setText(book.getAuthor());
 
-        // Tạm thời chưa load ảnh online
         Glide.with(holder.itemView.getContext())
                 .load(book.getCoverUrl())
                 .placeholder(android.R.drawable.ic_menu_report_image)

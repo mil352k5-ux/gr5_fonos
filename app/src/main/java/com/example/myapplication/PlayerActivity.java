@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.service.AudioPlayerService;
-import com.example.myapplication.utils.FonosApiManager;
+import com.example.myapplication.controller.FonosApiManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

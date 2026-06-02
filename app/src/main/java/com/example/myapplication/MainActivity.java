@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.utils.FonosApiManager;
+import com.example.myapplication.controller.FonosApiManager;
 
 import org.json.JSONObject;
 

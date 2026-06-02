@@ -1,4 +1,6 @@
-package com.example.myapplication.utils;
+package com.example.myapplication.controller;
+
+import com.example.myapplication.utils.SupabaseConfig;
 
 import android.content.Context;
 import android.os.Handler;

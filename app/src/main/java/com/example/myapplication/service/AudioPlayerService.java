@@ -14,6 +14,10 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
+
 import com.example.myapplication.PlayerActivity;
 import com.example.myapplication.R;
 
@@ -32,6 +36,7 @@ public class AudioPlayerService extends Service {
     private static final String CHANNEL_ID = "fonos_audio_channel";
     private static final int NOTIFICATION_ID = 1001;
 
+    private MediaSessionCompat mediaSession;
     private MediaPlayer mediaPlayer;
     private boolean isPrepared = false;
     private boolean isPlaying = false;
@@ -45,6 +50,7 @@ public class AudioPlayerService extends Service {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+        mediaSession = new MediaSessionCompat(this, "AudioPlayerService");
     }
 
     @Override
@@ -81,6 +87,26 @@ public class AudioPlayerService extends Service {
         return START_STICKY;
     }
 
+    private void updateMediaSessionState() {
+        if (mediaSession == null) return;
+
+        MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, currentTitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, currentAuthor);
+        mediaSession.setMetadata(metadataBuilder.build());
+
+        long actions = PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP;
+        int state = isPlaying ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED;
+
+        PlaybackStateCompat playbackState = new PlaybackStateCompat.Builder()
+                .setActions(actions)
+                .setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1.0f)
+                .build();
+
+        mediaSession.setPlaybackState(playbackState);
+        mediaSession.setActive(true);
+    }
+
     private void playNewAudio(String audioUrl) {
         releasePlayer();
 
@@ -100,11 +126,13 @@ public class AudioPlayerService extends Service {
                 isPrepared = true;
                 mp.start();
                 isPlaying = true;
+                updateMediaSessionState();
                 updateNotification("Đang phát");
             });
 
             mediaPlayer.setOnCompletionListener(mp -> {
                 isPlaying = false;
+                updateMediaSessionState();
                 updateNotification("Đã phát xong");
             });
 
@@ -112,6 +140,7 @@ public class AudioPlayerService extends Service {
 
         } catch (Exception e) {
             isPlaying = false;
+            updateMediaSessionState();
             updateNotification("Không mở được audio");
         }
     }
@@ -122,10 +151,12 @@ public class AudioPlayerService extends Service {
         if (isPlaying) {
             mediaPlayer.pause();
             isPlaying = false;
+            updateMediaSessionState();
             updateNotification("Đang tạm dừng");
         } else {
             mediaPlayer.start();
             isPlaying = true;
+            updateMediaSessionState();
             updateNotification("Đang phát");
         }
     }
@@ -187,6 +218,9 @@ public class AudioPlayerService extends Service {
                 .setOngoing(isPlaying)
                 .addAction(toggleIcon, toggleText, togglePendingIntent)
                 .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", stopPendingIntent)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setMediaSession(mediaSession.getSessionToken())
+                        .setShowActionsInCompactView(0, 1))
                 .build();
     }
 
@@ -220,11 +254,19 @@ public class AudioPlayerService extends Service {
 
         isPrepared = false;
         isPlaying = false;
+
+        if (mediaSession != null) {
+            mediaSession.setActive(false);
+        }
     }
 
     @Override
     public void onDestroy() {
         releasePlayer();
+        if (mediaSession != null) {
+            mediaSession.setActive(false);
+            mediaSession.release();
+        }
         super.onDestroy();
     }
 

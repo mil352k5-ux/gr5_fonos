@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.adapter.BestSellerAdapter;
-import com.example.myapplication.adapter.BookAdapter;
 import com.example.myapplication.model.Book;
-import com.example.myapplication.utils.FonosApiManager;
+import com.example.myapplication.controller.FonosApiManager;
 import com.example.myapplication.utils.SupabaseConfig;
 
 import com.bumptech.glide.Glide;
