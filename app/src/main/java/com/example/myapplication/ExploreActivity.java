@@ -10,6 +10,27 @@ public class ExploreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
         
+        findViewById(R.id.cardAudiobooks).setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("initial_tab", "audiobook");
+            startActivity(intent);
+            finish();
+        });
+
+        findViewById(R.id.cardEbooks).setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("initial_tab", "ebook");
+            startActivity(intent);
+            finish();
+        });
+
+        findViewById(R.id.cardSummary).setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("initial_tab", "summary");
+            startActivity(intent);
+            finish();
+        });
+
         setupBottomNavigation();
     }
 

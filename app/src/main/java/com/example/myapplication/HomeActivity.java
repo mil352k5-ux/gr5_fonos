@@ -80,12 +80,7 @@ public class HomeActivity extends AppCompatActivity {
 
         new LinearSnapHelper().attachToRecyclerView(rvBestSellers);
 
-        Button btnUpgrade = findViewById(R.id.btnUpgrade);
-        if (btnUpgrade != null) {
-            btnUpgrade.setOnClickListener(v ->
-                    Toast.makeText(this, "Đã có dữ liệu sách trong Supabase", Toast.LENGTH_SHORT).show()
-            );
-        }
+
 
         View profileIcon = findViewById(R.id.profile_icon);
         if (profileIcon != null) {
@@ -123,6 +118,16 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         setupBottomNavigation();
+
+        // Check if there is an intent to open a specific tab
+        String initialTab = getIntent().getStringExtra("initial_tab");
+        if ("ebook".equals(initialTab)) {
+            switchTab(TabState.EBOOKS);
+        } else if ("summary".equals(initialTab)) {
+            switchTab(TabState.SUMMARY);
+        } else {
+            switchTab(TabState.AUDIOBOOKS);
+        }
 
         loadBestSellerBook();
         loadBooksPaged();
@@ -206,7 +211,7 @@ public class HomeActivity extends AppCompatActivity {
                     tvBestSellersHeader.setText("Top Tóm Tắt Thịnh Hành");
                     tvBestSellersHeader.setVisibility(View.VISIBLE);
                 }
-                if (layoutCategories != null) layoutCategories.setVisibility(View.GONE);
+                if (layoutCategories != null) layoutCategories.setVisibility(View.VISIBLE);
                 
                 if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText("Tóm Tắt Sách Cho Bạn");
                 if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Nắm trọn ý chính trong 10 phút");

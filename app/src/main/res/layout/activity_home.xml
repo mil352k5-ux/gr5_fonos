@@ -4,49 +4,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF3E0">
+    android:background="#F8FAFC">
 
-    <!-- Top Bar -->
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@android:drawable/ic_menu_gallery"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnUpgrade"
+    <!-- Top Bar (Soundwave Logo + Premium Upgrade Button + Profile Circle) -->
+    <LinearLayout
+        android:id="@+id/logo_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="#FF7043"
-        android:text="@string/upgrade"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/logo"
-        app:layout_constraintEnd_toStartOf="@+id/profile_icon"
-        app:layout_constraintTop_toTopOf="@+id/logo" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <View
+        <!-- Soundwave vertical bars -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginEnd="6dp">
+            <View
+                android:layout_width="3dp"
+                android:layout_height="12dp"
+                android:background="#FF7043"
+                android:layout_margin="1dp"/>
+            <View
+                android:layout_width="3dp"
+                android:layout_height="22dp"
+                android:background="#FF7043"
+                android:layout_margin="1dp"/>
+            <View
+                android:layout_width="3dp"
+                android:layout_height="30dp"
+                android:background="#FF7043"
+                android:layout_margin="1dp"/>
+            <View
+                android:layout_width="3dp"
+                android:layout_height="18dp"
+                android:background="#FF7043"
+                android:layout_margin="1dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fonos"
+            android:textColor="#0C1D37"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+
+    <!-- Profile Circle 'T' -->
+    <androidx.cardview.widget.CardView
         android:id="@+id/profile_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginEnd="16dp"
-        android:background="@android:color/holo_purple"
-        app:layout_constraintBottom_toBottomOf="@+id/logo"
+        app:cardCornerRadius="18dp"
+        app:cardBackgroundColor="#9C27B0"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/logo_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/logo" />
+        app:layout_constraintTop_toTopOf="@+id/logo_layout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="T"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+    </androidx.cardview.widget.CardView>
 
-    <!-- Tabs -->
+    <!-- Tabs Container -->
     <LinearLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/logo">
+        android:background="#F8FAFC"
+        app:layout_constraintTop_toBottomOf="@+id/logo_layout">
 
         <!-- Sách nói Tab -->
         <LinearLayout
@@ -57,19 +99,21 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:paddingVertical="8dp">
             <TextView
                 android:id="@+id/tvTabAudiobooks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/tab_audiobooks"
-                android:textColor="@android:color/black"
+                android:text="Sách nói"
+                android:textColor="#0C1D37"
+                android:textSize="15sp"
                 android:textStyle="bold" />
             <View
                 android:id="@+id/indicator_audiobooks"
-                android:layout_width="40dp"
+                android:layout_width="60dp"
                 android:layout_height="3dp"
+                android:layout_marginTop="6dp"
                 android:background="#FF7043"
                 android:visibility="visible" />
         </LinearLayout>
@@ -83,18 +127,20 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:paddingVertical="8dp">
             <TextView
                 android:id="@+id/tvTabEbook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/tab_ebook"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Ebook"
+                android:textColor="#757575"
+                android:textSize="15sp" />
             <View
                 android:id="@+id/indicator_ebook"
-                android:layout_width="40dp"
+                android:layout_width="60dp"
                 android:layout_height="3dp"
+                android:layout_marginTop="6dp"
                 android:background="#FF7043"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -108,48 +154,61 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:paddingVertical="8dp">
             <TextView
                 android:id="@+id/tvTabSummary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/tab_summary"
-                android:textColor="@android:color/darker_gray" />
+                android:text="Tóm tắt sách"
+                android:textColor="#757575"
+                android:textSize="15sp" />
             <View
                 android:id="@+id/indicator_summary"
-                android:layout_width="40dp"
+                android:layout_width="60dp"
                 android:layout_height="3dp"
+                android:layout_marginTop="6dp"
                 android:background="#FF7043"
                 android:visibility="invisible" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Main Content Scroll -->
+    <View
+        android:id="@+id/tab_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0"
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout"/>
+
+    <!-- Scrollable Main Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
-        app:layout_constraintTop_toBottomOf="@+id/tab_layout">
+        app:layout_constraintTop_toBottomOf="@+id/tab_divider">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingBottom="24dp">
 
+            <!-- Title for Best Seller Section -->
             <TextView
                 android:id="@+id/tvBestSellersHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="Top Sách Nói Thịnh Hành"
-                android:textColor="#1A237E"
-                android:textSize="20sp"
+                android:textColor="#0C1D37"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
-            <!-- Best Seller Carousel -->
+            <!-- Best Seller Slider Carousel -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBestSellers"
                 android:layout_width="match_parent"
@@ -157,15 +216,15 @@
                 android:layout_gravity="center_horizontal"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingHorizontal="32dp" />
+                android:paddingHorizontal="16dp" />
 
-            <!-- Categories (Danh Mục) Section -->
+            <!-- Categories Horizontal scrolling chips -->
             <LinearLayout
                 android:id="@+id/layoutCategories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -173,14 +232,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="12dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Danh Mục"
-                        android:textColor="#142B4A"
-                        android:textSize="20sp"
+                        android:textColor="#0C1D37"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
@@ -194,7 +255,9 @@
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none">
+                    android:scrollbars="none"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -206,10 +269,10 @@
                             android:layout_height="wrap_content"
                             android:text="💪 Kỹ năng"
                             android:background="@drawable/bg_category_chip"
-                            android:textColor="#142B4A"
+                            android:textColor="#1E293B"
                             android:textSize="14sp"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="10dp"
+                            android:paddingVertical="9dp"
                             android:layout_marginEnd="8dp" />
 
                         <TextView
@@ -217,10 +280,10 @@
                             android:layout_height="wrap_content"
                             android:text="🤔 Tư duy"
                             android:background="@drawable/bg_category_chip"
-                            android:textColor="#142B4A"
+                            android:textColor="#1E293B"
                             android:textSize="14sp"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="10dp"
+                            android:paddingVertical="9dp"
                             android:layout_marginEnd="8dp" />
 
                         <TextView
@@ -228,10 +291,10 @@
                             android:layout_height="wrap_content"
                             android:text="📜 Văn học"
                             android:background="@drawable/bg_category_chip"
-                            android:textColor="#142B4A"
+                            android:textColor="#1E293B"
                             android:textSize="14sp"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="10dp"
+                            android:paddingVertical="9dp"
                             android:layout_marginEnd="8dp" />
 
                         <TextView
@@ -239,10 +302,10 @@
                             android:layout_height="wrap_content"
                             android:text="👩‍🍼 Nuôi dạy con"
                             android:background="@drawable/bg_category_chip"
-                            android:textColor="#142B4A"
+                            android:textColor="#1E293B"
                             android:textSize="14sp"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="10dp"
+                            android:paddingVertical="9dp"
                             android:layout_marginEnd="8dp" />
 
                         <TextView
@@ -250,10 +313,10 @@
                             android:layout_height="wrap_content"
                             android:text="👶 Thiếu nhi"
                             android:background="@drawable/bg_category_chip"
-                            android:textColor="#142B4A"
+                            android:textColor="#1E293B"
                             android:textSize="14sp"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="10dp"
+                            android:paddingVertical="9dp"
                             android:layout_marginEnd="8dp" />
 
                         <TextView
@@ -261,88 +324,151 @@
                             android:layout_height="wrap_content"
                             android:text="🤝 Kinh doanh"
                             android:background="@drawable/bg_category_chip"
-                            android:textColor="#142B4A"
+                            android:textColor="#1E293B"
                             android:textSize="14sp"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="10dp" />
+                            android:paddingVertical="9dp" />
 
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
 
+            <!-- Main Books List Header -->
             <TextView
                 android:id="@+id/tvBooksForYouTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="@string/books_for_you_title"
-                android:textColor="#1A237E"
-                android:textSize="20sp"
+                android:text="12 Sách Nói Dành Cho Bạn"
+                android:textColor="#0C1D37"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvBooksForYouSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/books_for_you_subtitle"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="14sp" />
+                android:layout_marginStart="16dp"
+                android:text="Phù hợp với người mới – bấm để nghe ngay"
+                android:textColor="#757575"
+                android:textSize="13sp" />
 
+            <!-- Main Horizontal List of Books -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clipToPadding="false"
                 android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Nav -->
+    <!-- Bottom Navigation Bar -->
     <LinearLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@android:color/white"
+        android:layout_height="62dp"
+        android:background="#FFFFFF"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navBooks"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_books"
-            android:textColor="#FF7043"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📖"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sách"
+                android:textColor="#FF7043"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navExplore"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_explore"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔍"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Khám phá"
+                android:textColor="#7E8A9A"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navChallenge"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_challenge"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏳️"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thử thách"
+                android:textColor="#7E8A9A"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navLibrary"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_library"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📚"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thư viện"
+                android:textColor="#7E8A9A"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

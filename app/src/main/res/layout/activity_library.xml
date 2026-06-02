@@ -1,65 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2E3B4E">
+    android:background="#1C2E4A">
 
-    <!-- Header -->
+    <!-- Header Section -->
     <TextView
         android:id="@+id/tvLibrary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/fonos_nav_library"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Thư viện"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/holo_purple"
+    <!-- Action Icons -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/tvLibrary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvLibrary" />
+        app:layout_constraintTop_toTopOf="@+id/tvLibrary">
 
-    <!-- Tabs with Icons -->
+        <TextView
+            android:id="@+id/btnSearch"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="🔍"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/profile_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/circle_background"
+            android:backgroundTint="#8E24AA"
+            android:gravity="center"
+            android:text="T"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Circular Feature Tabs (5 items row) -->
     <LinearLayout
         android:id="@+id/lib_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
+        android:weightSum="5"
+        android:paddingHorizontal="8dp"
         app:layout_constraintTop_toBottomOf="@+id/tvLibrary">
 
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-            <View android:layout_width="40dp" android:layout_height="40dp" android:background="@android:drawable/ic_menu_today"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lib_recent" android:textColor="@android:color/white" android:textSize="10sp"/>
+        <!-- Tab 1: Gần đây (Selected) -->
+        <LinearLayout
+            android:id="@+id/tabRecent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/ivTabRecentCircle"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_background"
+                android:gravity="center"
+                android:text="🕒"
+                android:textColor="#FF7043"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvTabRecentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Gần đây"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
         </LinearLayout>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-            <View android:layout_width="40dp" android:layout_height="40dp" android:background="@android:drawable/ic_menu_save"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lib_purchased" android:textColor="@android:color/white" android:textSize="10sp"/>
+
+        <!-- Tab 2: Đã mua -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_background_grey"
+                android:gravity="center"
+                android:text="👜"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Đã mua"
+                android:textColor="#AFC7E4"
+                android:textSize="11sp" />
         </LinearLayout>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-            <View android:layout_width="40dp" android:layout_height="40dp" android:background="@android:drawable/stat_sys_download"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lib_downloaded" android:textColor="@android:color/white" android:textSize="10sp"/>
+
+        <!-- Tab 3: Đã tải -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_background_grey"
+                android:gravity="center"
+                android:text="📥"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Đã tải"
+                android:textColor="#AFC7E4"
+                android:textSize="11sp" />
         </LinearLayout>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-            <View android:layout_width="40dp" android:layout_height="40dp" android:background="@android:drawable/btn_star_big_on"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lib_favorites" android:textColor="@android:color/white" android:textSize="10sp"/>
+
+        <!-- Tab 4: Yêu thích -->
+        <LinearLayout
+            android:id="@+id/tabFavorites"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/ivTabFavoritesCircle"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_background_grey"
+                android:gravity="center"
+                android:text="❤️"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvTabFavoritesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Yêu thích"
+                android:textColor="#AFC7E4"
+                android:textSize="11sp" />
         </LinearLayout>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
-            <View android:layout_width="40dp" android:layout_height="40dp" android:background="@android:drawable/ic_menu_myplaces"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lib_bookmarks" android:textColor="@android:color/white" android:textSize="10sp"/>
+
+        <!-- Tab 5: Đánh dấu -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_background_grey"
+                android:gravity="center"
+                android:text="📖"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Đánh dấu"
+                android:textColor="#AFC7E4"
+                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- White Content Area -->
+    <!-- White Bottom Card Content Area -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -68,99 +212,175 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         app:layout_constraintTop_toBottomOf="@+id/lib_tabs">
 
-        <ImageView
-            android:id="@+id/ivEmpty"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="64dp"
-            android:src="@android:drawable/ic_menu_compass"
-            app:layout_constraintEnd_toEndOf="parent"
+        <!-- Title of current list -->
+        <TextView
+            android:id="@+id/tvLibraryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Gần đây"
+            android:textColor="#142B4A"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvEmptyTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/lib_empty_title"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivEmpty" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/lib_empty_subtitle"
-            android:textColor="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvEmptyTitle" />
-
-        <!-- Book Placeholders -->
-        <LinearLayout
+        <!-- RecyclerView for Books -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLibraryBooks"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="20dp"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/tvLibraryTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/item_library_book" />
+
+        <!-- Empty State Container -->
+        <LinearLayout
+            android:id="@+id/layoutEmptyState"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent">
-            <View android:layout_width="80dp" android:layout_height="120dp" android:background="@android:color/darker_gray" android:layout_margin="8dp"/>
-            <View android:layout_width="80dp" android:layout_height="120dp" android:background="@android:color/darker_gray" android:layout_margin="8dp"/>
-            <View android:layout_width="80dp" android:layout_height="120dp" android:background="@android:color/darker_gray" android:layout_margin="8dp"/>
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivEmpty"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@android:drawable/ic_menu_compass"
+                android:tint="#A0AAB5" />
+
+            <TextView
+                android:id="@+id/tvEmptyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Thư viện của bạn đang trống"
+                android:textColor="#142B4A"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvEmptySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Hãy tìm kiếm và lưu tiến trình nghe sách nhé!"
+                android:textColor="#7E8A9A"
+                android:textSize="13sp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Bottom Nav -->
+    <!-- Bottom Navigation Bar -->
     <LinearLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@android:color/white"
+        android:layout_height="62dp"
+        android:background="#FFFFFF"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navBooks"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_books"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📖"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sách"
+                android:textColor="#7E8A9A"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navExplore"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_explore"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔍"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Khám phá"
+                android:textColor="#7E8A9A"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navChallenge"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_challenge"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏳️"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thử thách"
+                android:textColor="#7E8A9A"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navLibrary"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/fonos_nav_library"
-            android:textColor="#FF7043"
-            android:textSize="10sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📚"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thư viện"
+                android:textColor="#FF7043"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
