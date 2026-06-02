@@ -48,33 +48,81 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/logo">
 
-        <TextView
+        <!-- Sách nói Tab -->
+        <LinearLayout
+            android:id="@+id/tab_audiobooks_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:gravity="center"
-            android:padding="8dp"
-            android:text="@string/tab_audiobooks"
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:id="@+id/tvTabAudiobooks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/tab_audiobooks"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+            <View
+                android:id="@+id/indicator_audiobooks"
+                android:layout_width="40dp"
+                android:layout_height="3dp"
+                android:background="#FF7043"
+                android:visibility="visible" />
+        </LinearLayout>
 
-        <TextView
+        <!-- Ebook Tab -->
+        <LinearLayout
+            android:id="@+id/tab_ebook_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:gravity="center"
-            android:padding="8dp"
-            android:text="@string/tab_ebook"
-            android:textColor="@android:color/darker_gray" />
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:id="@+id/tvTabEbook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/tab_ebook"
+                android:textColor="@android:color/darker_gray" />
+            <View
+                android:id="@+id/indicator_ebook"
+                android:layout_width="40dp"
+                android:layout_height="3dp"
+                android:background="#FF7043"
+                android:visibility="invisible" />
+        </LinearLayout>
 
-        <TextView
+        <!-- Tóm tắt sách Tab -->
+        <LinearLayout
+            android:id="@+id/tab_summary_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:gravity="center"
-            android:padding="8dp"
-            android:text="@string/tab_summary"
-            android:textColor="@android:color/darker_gray" />
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:id="@+id/tvTabSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/tab_summary"
+                android:textColor="@android:color/darker_gray" />
+            <View
+                android:id="@+id/indicator_summary"
+                android:layout_width="40dp"
+                android:layout_height="3dp"
+                android:background="#FF7043"
+                android:visibility="invisible" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Main Content Scroll -->
@@ -90,6 +138,17 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <TextView
+                android:id="@+id/tvBestSellersHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Top Sách Nói Thịnh Hành"
+                android:textColor="#1A237E"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
             <!-- Best Seller Carousel -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBestSellers"
@@ -100,7 +159,119 @@
                 android:nestedScrollingEnabled="false"
                 android:paddingHorizontal="32dp" />
 
+            <!-- Categories (Danh Mục) Section -->
+            <LinearLayout
+                android:id="@+id/layoutCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Danh Mục"
+                        android:textColor="#142B4A"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="›"
+                        android:textColor="#FF7043"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💪 Kỹ năng"
+                            android:background="@drawable/bg_category_chip"
+                            android:textColor="#142B4A"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🤔 Tư duy"
+                            android:background="@drawable/bg_category_chip"
+                            android:textColor="#142B4A"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📜 Văn học"
+                            android:background="@drawable/bg_category_chip"
+                            android:textColor="#142B4A"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👩‍🍼 Nuôi dạy con"
+                            android:background="@drawable/bg_category_chip"
+                            android:textColor="#142B4A"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👶 Thiếu nhi"
+                            android:background="@drawable/bg_category_chip"
+                            android:textColor="#142B4A"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🤝 Kinh doanh"
+                            android:background="@drawable/bg_category_chip"
+                            android:textColor="#142B4A"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="10dp" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+
             <TextView
+                android:id="@+id/tvBooksForYouTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -110,6 +281,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvBooksForYouSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/books_for_you_subtitle"

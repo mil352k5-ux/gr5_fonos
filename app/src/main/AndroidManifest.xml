@@ -39,6 +39,7 @@
         <activity android:name=".ChallengeActivity" />
         <activity android:name=".BookDetailActivity" />
         <activity android:name=".PlayerActivity" />
+        <activity android:name=".EbookReaderActivity" />
 
     </application>
 

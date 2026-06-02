@@ -34,6 +34,8 @@ public class BookDetailActivity extends AppCompatActivity {
         String category = getIntent().getStringExtra("category");
         String coverUrl = getIntent().getStringExtra("cover_url");
         String bookId = getIntent().getStringExtra("id");
+        String bookType = getIntent().getStringExtra("book_type");
+        boolean isEbook = "ebook".equals(bookType);
 
         tvBookTitle.setText(title);
         tvBookAuthor.setText(author);
@@ -41,18 +43,34 @@ public class BookDetailActivity extends AppCompatActivity {
         tvBookCategory.setText(category);
         tvBack.setOnClickListener(v -> finish());
 
+        if (isEbook) {
+            tvListenNow.setText("Đọc ngay");
+        } else {
+            tvListenNow.setText("Nghe ngay");
+        }
+
         Glide.with(this)
                 .load(coverUrl)
                 .placeholder(android.R.drawable.ic_menu_report_image)
                 .into(imgBookCover);
 
         tvListenNow.setOnClickListener(v -> {
-            Intent intent = new Intent(BookDetailActivity.this, PlayerActivity.class);
-            intent.putExtra("book_id", bookId);
-            intent.putExtra("title", title);
-            intent.putExtra("author", author);
-            intent.putExtra("cover_url", coverUrl);
-            startActivity(intent);
+            if (isEbook) {
+                Intent intent = new Intent(BookDetailActivity.this, EbookReaderActivity.class);
+                intent.putExtra("book_id", bookId);
+                intent.putExtra("title", title);
+                intent.putExtra("author", author);
+                intent.putExtra("description", description);
+                intent.putExtra("cover_url", coverUrl);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(BookDetailActivity.this, PlayerActivity.class);
+                intent.putExtra("book_id", bookId);
+                intent.putExtra("title", title);
+                intent.putExtra("author", author);
+                intent.putExtra("cover_url", coverUrl);
+                startActivity(intent);
+            }
         });
     }
 }

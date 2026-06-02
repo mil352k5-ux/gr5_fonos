@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,17 @@ public class HomeActivity extends AppCompatActivity {
     private int currentOffset = 0;
     private boolean isLoading = false;
     private boolean isLastPage = false;
+
+    private enum TabState {
+        AUDIOBOOKS, EBOOKS, SUMMARY
+    }
+    private TabState currentTab = TabState.AUDIOBOOKS;
+
+    private View tabAudiobooksContainer, tabEbookContainer, tabSummaryContainer;
+    private TextView tvTabAudiobooks, tvTabEbook, tvTabSummary;
+    private View indicatorAudiobooks, indicatorEbook, indicatorSummary;
+    private TextView tvBestSellersHeader, tvBooksForYouTitle, tvBooksForYouSubtitle;
+    private View layoutCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +96,124 @@ public class HomeActivity extends AppCompatActivity {
             );
         }
 
+        // Bind Tab Views
+        tabAudiobooksContainer = findViewById(R.id.tab_audiobooks_container);
+        tabEbookContainer = findViewById(R.id.tab_ebook_container);
+        tabSummaryContainer = findViewById(R.id.tab_summary_container);
+
+        tvTabAudiobooks = findViewById(R.id.tvTabAudiobooks);
+        tvTabEbook = findViewById(R.id.tvTabEbook);
+        tvTabSummary = findViewById(R.id.tvTabSummary);
+
+        indicatorAudiobooks = findViewById(R.id.indicator_audiobooks);
+        indicatorEbook = findViewById(R.id.indicator_ebook);
+        indicatorSummary = findViewById(R.id.indicator_summary);
+
+        tvBestSellersHeader = findViewById(R.id.tvBestSellersHeader);
+        tvBooksForYouTitle = findViewById(R.id.tvBooksForYouTitle);
+        tvBooksForYouSubtitle = findViewById(R.id.tvBooksForYouSubtitle);
+        layoutCategories = findViewById(R.id.layoutCategories);
+
+        if (tabAudiobooksContainer != null) {
+            tabAudiobooksContainer.setOnClickListener(v -> switchTab(TabState.AUDIOBOOKS));
+        }
+        if (tabEbookContainer != null) {
+            tabEbookContainer.setOnClickListener(v -> switchTab(TabState.EBOOKS));
+        }
+        if (tabSummaryContainer != null) {
+            tabSummaryContainer.setOnClickListener(v -> switchTab(TabState.SUMMARY));
+        }
+
         setupBottomNavigation();
 
         loadBestSellerBook();
         loadBooksPaged();
+    }
+
+    private void switchTab(TabState state) {
+        currentTab = state;
+
+        // Reset styling
+        if (tvTabAudiobooks != null) {
+            tvTabAudiobooks.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tvTabAudiobooks.setTypeface(null, android.graphics.Typeface.NORMAL);
+        }
+        if (indicatorAudiobooks != null) {
+            indicatorAudiobooks.setVisibility(View.INVISIBLE);
+        }
+
+        if (tvTabEbook != null) {
+            tvTabEbook.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tvTabEbook.setTypeface(null, android.graphics.Typeface.NORMAL);
+        }
+        if (indicatorEbook != null) {
+            indicatorEbook.setVisibility(View.INVISIBLE);
+        }
+
+        if (tvTabSummary != null) {
+            tvTabSummary.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            tvTabSummary.setTypeface(null, android.graphics.Typeface.NORMAL);
+        }
+        if (indicatorSummary != null) {
+            indicatorSummary.setVisibility(View.INVISIBLE);
+        }
+
+        // Apply selected styling and update UI titles/sections
+        switch (state) {
+            case AUDIOBOOKS:
+                if (tvTabAudiobooks != null) {
+                    tvTabAudiobooks.setTextColor(getResources().getColor(android.R.color.black));
+                    tvTabAudiobooks.setTypeface(null, android.graphics.Typeface.BOLD);
+                }
+                if (indicatorAudiobooks != null) {
+                    indicatorAudiobooks.setVisibility(View.VISIBLE);
+                }
+                
+                if (tvBestSellersHeader != null) tvBestSellersHeader.setVisibility(View.GONE);
+                if (layoutCategories != null) layoutCategories.setVisibility(View.GONE);
+                
+                if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText(R.string.books_for_you_title);
+                if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText(R.string.books_for_you_subtitle);
+                break;
+
+            case EBOOKS:
+                if (tvTabEbook != null) {
+                    tvTabEbook.setTextColor(getResources().getColor(android.R.color.black));
+                    tvTabEbook.setTypeface(null, android.graphics.Typeface.BOLD);
+                }
+                if (indicatorEbook != null) {
+                    indicatorEbook.setVisibility(View.VISIBLE);
+                }
+                
+                if (tvBestSellersHeader != null) {
+                    tvBestSellersHeader.setText("Top Ebook Thịnh Hành");
+                    tvBestSellersHeader.setVisibility(View.VISIBLE);
+                }
+                if (layoutCategories != null) layoutCategories.setVisibility(View.VISIBLE);
+                
+                if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText("Ebook Dành Cho Bạn");
+                if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Đọc sách mọi lúc mọi nơi – bấm để đọc ngay");
+                break;
+
+            case SUMMARY:
+                if (tvTabSummary != null) {
+                    tvTabSummary.setTextColor(getResources().getColor(android.R.color.black));
+                    tvTabSummary.setTypeface(null, android.graphics.Typeface.BOLD);
+                }
+                if (indicatorSummary != null) {
+                    indicatorSummary.setVisibility(View.VISIBLE);
+                }
+                
+                if (tvBestSellersHeader != null) {
+                    tvBestSellersHeader.setText("Top Tóm Tắt Thịnh Hành");
+                    tvBestSellersHeader.setVisibility(View.VISIBLE);
+                }
+                if (layoutCategories != null) layoutCategories.setVisibility(View.GONE);
+                
+                if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText("Tóm Tắt Sách Cho Bạn");
+                if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Nắm trọn ý chính trong 10 phút");
+                break;
+        }
     }
 
     private void openBookDetail(Book book) {
@@ -98,6 +224,15 @@ public class HomeActivity extends AppCompatActivity {
         intent.putExtra("description", book.getDescription());
         intent.putExtra("category", book.getCategory());
         intent.putExtra("cover_url", book.getCoverUrl());
+        
+        if (currentTab == TabState.EBOOKS) {
+            intent.putExtra("book_type", "ebook");
+        } else if (currentTab == TabState.SUMMARY) {
+            intent.putExtra("book_type", "summary");
+        } else {
+            intent.putExtra("book_type", "audiobook");
+        }
+        
         startActivity(intent);
     }
 
@@ -202,6 +337,14 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, ExploreActivity.class));
             finish();
         });
+
+        View navChallenge = findViewById(R.id.navChallenge);
+        if (navChallenge != null) {
+            navChallenge.setOnClickListener(v -> {
+                startActivity(new Intent(this, ChallengeActivity.class));
+                finish();
+            });
+        }
 
         findViewById(R.id.navLibrary).setOnClickListener(v -> {
             startActivity(new Intent(this, LibraryActivity.class));
