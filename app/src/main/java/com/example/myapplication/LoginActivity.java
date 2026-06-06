@@ -23,7 +23,7 @@ import com.google.android.gms.tasks.Task;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.utils.FonosApiManager;
+import com.example.myapplication.controller.FonosApiManager;
 
 import org.json.JSONObject;
 

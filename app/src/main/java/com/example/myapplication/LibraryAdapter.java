@@ -1,4 +1,4 @@
-package com.example.myapplication.adapter;
+package com.example.myapplication;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,39 +8,40 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.R;
+import com.bumptech.glide.Glide;
 import com.example.myapplication.model.Book;
 
 import java.util.List;
-import com.bumptech.glide.Glide;
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
-    private List<Book> books;
-    private OnBookClickListener listener;
+public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder> {
+
+    private final List<Book> books;
+    private final OnBookClickListener listener;
 
     public interface OnBookClickListener {
         void onBookClick(Book book);
+        void onPlayClick(Book book);
     }
-    public BookAdapter(List<Book> books, OnBookClickListener listener) {
+
+    public LibraryAdapter(List<Book> books, OnBookClickListener listener) {
         this.books = books;
         this.listener = listener;
     }
 
     @Override
-    public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LibraryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_book, parent, false);
-        return new BookViewHolder(view);
+                .inflate(R.layout.item_library_book, parent, false);
+        return new LibraryViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(BookViewHolder holder, int position) {
+    public void onBindViewHolder(LibraryViewHolder holder, int position) {
         Book book = books.get(position);
 
         holder.tvTitle.setText(book.getTitle());
         holder.tvAuthor.setText(book.getAuthor());
 
-        // Tạm thời chưa load ảnh online
         Glide.with(holder.itemView.getContext())
                 .load(book.getCoverUrl())
                 .placeholder(android.R.drawable.ic_menu_report_image)
@@ -51,6 +52,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 listener.onBookClick(book);
             }
         });
+
+        holder.btnPlay.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onPlayClick(book);
+            }
+        });
+        
+        holder.btnMore.setOnClickListener(v -> {
+            // Option to show a menu or simple action
+        });
     }
 
     @Override
@@ -58,15 +69,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         return books.size();
     }
 
-    public static class BookViewHolder extends RecyclerView.ViewHolder {
+    public static class LibraryViewHolder extends RecyclerView.ViewHolder {
         ImageView imgCover;
         TextView tvTitle, tvAuthor;
+        TextView btnPlay, btnMore;
 
-        public BookViewHolder(View itemView) {
+        public LibraryViewHolder(View itemView) {
             super(itemView);
             imgCover = itemView.findViewById(R.id.imgCover);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvAuthor = itemView.findViewById(R.id.tvAuthor);
+            btnPlay = itemView.findViewById(R.id.btnPlay);
+            btnMore = itemView.findViewById(R.id.btnMore);
         }
     }
 }

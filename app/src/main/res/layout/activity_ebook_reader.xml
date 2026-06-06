@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAF6EE">
+
+    <!-- Custom Reading Top Bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFFBF4"
+        android:elevation="4dp"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/tvReaderBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="‹ Quay lại"
+            android:textColor="#142B4A"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/tvReaderHeaderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/tvReaderBack"
+            android:layout_toLeftOf="@+id/layoutFontControls"
+            android:layout_marginHorizontal="12dp"
+            android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Đọc Ebook"
+            android:textColor="#142B4A"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layoutFontControls"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/btnTextDecrease"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_category_chip"
+                android:gravity="center"
+                android:text="A-"
+                android:textColor="#142B4A"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/btnTextIncrease"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_category_chip"
+                android:gravity="center"
+                android:text="A+"
+                android:textColor="#142B4A"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Reading Scrollable View -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="20dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Title Inside Content -->
+            <TextView
+                android:id="@+id/tvContentTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên Sách"
+                android:textColor="#142B4A"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="16dp" />
+
+            <!-- Author Inside Content -->
+            <TextView
+                android:id="@+id/tvContentAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tác giả"
+                android:textColor="#7E8A9A"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp" />
+
+            <View
+                android:layout_width="60dp"
+                android:layout_height="2dp"
+                android:background="#FF7043"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Book Chapters / Main Text -->
+            <TextView
+                android:id="@+id/tvBookBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nội dung sách đang được tải..."
+                android:textColor="#2E3A48"
+                android:textSize="16sp"
+                android:lineSpacingMultiplier="1.5"
+                android:layout_marginBottom="40dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

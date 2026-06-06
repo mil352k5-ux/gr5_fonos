@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/playerRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#123A63"
+    android:background="@drawable/gradient_detail_header"
     android:fillViewport="true">
 
     <LinearLayout
@@ -14,67 +14,77 @@
         android:paddingStart="24dp"
         android:paddingTop="24dp"
         android:paddingEnd="24dp"
-        android:paddingBottom="28dp">
+        android:paddingBottom="36dp">
 
         <!-- TOP BAR -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="56dp">
 
             <TextView
                 android:id="@+id/tvClosePlayer"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="#2D5578"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_background_trans"
                 android:gravity="center"
                 android:text="⌄"
                 android:textColor="#FFFFFF"
-                android:textSize="34sp"
-                android:textStyle="bold" />
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:layout_centerVertical="true" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Sách nói"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvBookmark"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="#2D5578"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/circle_background_trans"
                 android:gravity="center"
-                android:text="♡"
+                android:text="📖"
                 android:textColor="#FFFFFF"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textSize="22sp"
+                android:layout_centerVertical="true" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <!-- BOOK COVER -->
-        <ImageView
-            android:id="@+id/imgPlayerCover"
-            android:layout_width="250dp"
-            android:layout_height="340dp"
+        <!-- BOOK COVER CARD -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="220dp"
+            android:layout_height="310dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="26dp"
-            android:background="#DDE6EF"
-            android:elevation="8dp"
-            android:scaleType="centerCrop" />
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="12dp"
+            app:cardBackgroundColor="#DDE6EF">
+
+            <ImageView
+                android:id="@+id/imgPlayerCover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
 
         <!-- TITLE -->
         <TextView
             android:id="@+id/tvPlayerTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="32dp"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
             android:text="Tên sách"
             android:textColor="#FFFFFF"
-            android:textSize="30sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <!-- AUTHOR -->
@@ -87,204 +97,226 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="Tác giả"
-            android:textColor="#AFC7E4"
-            android:textSize="18sp"
+            android:textColor="#DDEEBC"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
-        <!-- STATUS -->
-        <TextView
-            android:id="@+id/tvPlayerStatus"
+        <!-- STATUS & FAVORITE IN ONE ROW -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="Sẵn sàng phát"
-            android:textColor="#D6E3F3"
-            android:textSize="14sp" />
-
-        <!-- FEATURE CARDS -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="76dp"
-            android:layout_marginTop="26dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="8dp">
 
             <TextView
-                android:id="@+id/tvSleepTimer"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:background="#2D5578"
-                android:gravity="center"
-                android:text="☾\nHẹn giờ"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp" />
+                android:id="@+id/tvPlayerStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/btnAddToPlaylist"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Đang chuẩn bị phát..."
+                android:textColor="#D6E3F3"
+                android:textSize="13sp"
+                android:layout_centerVertical="true" />
 
             <TextView
-                android:id="@+id/tvChapter"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:background="#2D5578"
+                android:id="@+id/btnAddToPlaylist"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/circle_background_trans"
                 android:gravity="center"
-                android:text="☷\nChương"
+                android:text="📂"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="16sp"
+                android:layout_centerVertical="true" />
 
-            <TextView
-                android:id="@+id/tvSpeed"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:background="#2D5578"
-                android:gravity="center"
-                android:text="1.0x\nTốc độ"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+        </RelativeLayout>
 
-        </LinearLayout>
-
-        <!-- SEEKBAR + TIME -->
+        <!-- SEEKBAR + TIME ROW -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvCurrentTime"
-                android:layout_width="64dp"
+                android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:text="00:00"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <SeekBar
                 android:id="@+id/seekAudio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:progress="0" />
+                android:progress="0"
+                android:progressTint="#FFFFFF"
+                android:thumbTint="#FFFFFF" />
 
             <TextView
                 android:id="@+id/tvTotalTime"
-                android:layout_width="64dp"
+                android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="-00:00"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
-        <!-- PLAYER CONTROLS -->
+        <!-- PLAYER CONTROLS (5-BUTTON ROW) -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="104dp"
-            android:layout_marginTop="26dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvPrevious"
-                android:layout_width="46dp"
-                android:layout_height="70dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:gravity="center"
-                android:text="|‹"
+                android:text="⏮"
                 android:textColor="#FFFFFF"
-                android:textSize="38sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvRewind15"
-                android:layout_width="58dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="12dp"
+                android:layout_width="48dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:text="↺15"
                 android:textColor="#FFFFFF"
-                android:textSize="27sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvPlayPause"
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:background="#FFFFFF"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_player_control_circle"
                 android:gravity="center"
                 android:text="▶"
-                android:textColor="#123A63"
-                android:textSize="42sp"
+                android:textColor="#3E4B27"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvForward30"
-                android:layout_width="58dp"
-                android:layout_height="70dp"
+                android:layout_width="48dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="30↻"
                 android:textColor="#FFFFFF"
-                android:textSize="27sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvNext"
-                android:layout_width="46dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="12dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:gravity="center"
-                android:text="›|"
+                android:text="⏭"
                 android:textColor="#FFFFFF"
-                android:textSize="38sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
-        <!-- BUY CARD -->
+        <!-- FEATURE CARDS (SLEEP TIMER, CHAPTERS, SPEED) -->
         <LinearLayout
-            android:id="@+id/layoutBuyBook"
             android:layout_width="match_parent"
-            android:layout_height="92dp"
-            android:layout_marginTop="20dp"
-            android:background="#2D5578"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp">
+            android:weightSum="3">
 
-            <TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:background="#456D90"
-                android:gravity="center"
-                android:text="♪"
-                android:textColor="#FFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
+            <!-- SLEEP TIMER -->
+            <LinearLayout
+                android:id="@+id/tvSleepTimer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
                 android:layout_weight="1"
-                android:text="Mua cuốn sách này bằng thẻ Fonos để tiết kiệm tới 80%.\nBạn được sở hữu vĩnh viễn sau khi mua."
-                android:textColor="#FFFFFF"
-                android:textSize="15sp" />
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="30dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌙"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Hẹn giờ tắt"
+                    android:textColor="#D6E3F3"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- CHAPTERS -->
+            <LinearLayout
+                android:id="@+id/tvChapter"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="›"
-                android:textColor="#FFFFFF"
-                android:textSize="38sp" />
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="☷"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Chương"
+                    android:textColor="#D6E3F3"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- SPEED -->
+            <LinearLayout
+                android:id="@+id/tvSpeed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.0x"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Tốc độ"
+                    android:textColor="#D6E3F3"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
