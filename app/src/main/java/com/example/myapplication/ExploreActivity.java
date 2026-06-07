@@ -3,8 +3,12 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.myapplication.utils.MiniPlayerController;
 
 public class ExploreActivity extends AppCompatActivity {
+    
+    private MiniPlayerController miniPlayerController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,9 @@ public class ExploreActivity extends AppCompatActivity {
         });
 
         setupBottomNavigation();
+
+        miniPlayerController = new MiniPlayerController(this);
+        miniPlayerController.init();
     }
 
     private void setupBottomNavigation() {
@@ -53,5 +60,21 @@ public class ExploreActivity extends AppCompatActivity {
             startActivity(new Intent(this, LibraryActivity.class));
             finish();
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStart();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStop();
+        }
     }
 }

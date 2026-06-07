@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F8FAFC">
 
-    <!-- Top Bar (Soundwave Logo + Premium Upgrade Button + Profile Circle) -->
+    <!-- Top Bar (Soundwave Logo + Profile Circle) -->
     <LinearLayout
         android:id="@+id/logo_layout"
         android:layout_width="wrap_content"
@@ -24,27 +24,27 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginEnd="6dp">
+            android:layout_marginEnd="8dp">
             <View
-                android:layout_width="3dp"
-                android:layout_height="12dp"
+                android:layout_width="3.5dp"
+                android:layout_height="14dp"
                 android:background="#FF7043"
-                android:layout_margin="1dp"/>
+                android:layout_margin="1.5dp"/>
             <View
-                android:layout_width="3dp"
-                android:layout_height="22dp"
+                android:layout_width="3.5dp"
+                android:layout_height="24dp"
                 android:background="#FF7043"
-                android:layout_margin="1dp"/>
+                android:layout_margin="1.5dp"/>
             <View
-                android:layout_width="3dp"
-                android:layout_height="30dp"
+                android:layout_width="3.5dp"
+                android:layout_height="32dp"
                 android:background="#FF7043"
-                android:layout_margin="1dp"/>
+                android:layout_margin="1.5dp"/>
             <View
-                android:layout_width="3dp"
+                android:layout_width="3.5dp"
                 android:layout_height="18dp"
                 android:background="#FF7043"
-                android:layout_margin="1dp"/>
+                android:layout_margin="1.5dp"/>
         </LinearLayout>
 
         <TextView
@@ -52,42 +52,45 @@
             android:layout_height="wrap_content"
             android:text="fonos"
             android:textColor="#0C1D37"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:letterSpacing="-0.02"/>
     </LinearLayout>
 
-
-
-    <!-- Profile Circle 'T' -->
+    <!-- Profile Circle 'T' with Premium Gradient -->
     <androidx.cardview.widget.CardView
         android:id="@+id/profile_icon"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="18dp"
-        app:cardBackgroundColor="#9C27B0"
-        app:cardElevation="0dp"
+        app:cardElevation="3dp"
         app:layout_constraintBottom_toBottomOf="@+id/logo_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/logo_layout">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_upgrade" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="T"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="center" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Tabs Container -->
+    <!-- Tabs Container (White elevated bar) -->
     <LinearLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:background="#F8FAFC"
+        android:background="#FFFFFF"
+        android:paddingVertical="4dp"
         app:layout_constraintTop_toBottomOf="@+id/logo_layout">
 
         <!-- Sách nói Tab -->
@@ -111,10 +114,10 @@
                 android:textStyle="bold" />
             <View
                 android:id="@+id/indicator_audiobooks"
-                android:layout_width="60dp"
+                android:layout_width="45dp"
                 android:layout_height="3dp"
                 android:layout_marginTop="6dp"
-                android:background="#FF7043"
+                android:background="@drawable/bg_tab_indicator"
                 android:visibility="visible" />
         </LinearLayout>
 
@@ -138,10 +141,10 @@
                 android:textSize="15sp" />
             <View
                 android:id="@+id/indicator_ebook"
-                android:layout_width="60dp"
+                android:layout_width="45dp"
                 android:layout_height="3dp"
                 android:layout_marginTop="6dp"
-                android:background="#FF7043"
+                android:background="@drawable/bg_tab_indicator"
                 android:visibility="invisible" />
         </LinearLayout>
 
@@ -165,10 +168,10 @@
                 android:textSize="15sp" />
             <View
                 android:id="@+id/indicator_summary"
-                android:layout_width="60dp"
+                android:layout_width="45dp"
                 android:layout_height="3dp"
                 android:layout_marginTop="6dp"
-                android:background="#FF7043"
+                android:background="@drawable/bg_tab_indicator"
                 android:visibility="invisible" />
         </LinearLayout>
     </LinearLayout>
@@ -185,7 +188,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/mini_player_container"
         app:layout_constraintTop_toBottomOf="@+id/tab_divider">
 
         <LinearLayout
@@ -194,19 +198,67 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
+            <!-- Welcome Greeting Banner -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_upgrade"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chào bạn, nghe gì hôm nay?"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Hàng ngàn cuốn sách nói chất lượng cao đang chờ đón bạn khám phá."
+                        android:textColor="#E2E8F0"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/button_rounded_white"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:text="Nghe Ngay"
+                        android:textColor="#FF7043"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <!-- Title for Best Seller Section -->
             <TextView
                 android:id="@+id/tvBestSellersHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
-                android:text="Top Sách Nói Thịnh Hành"
+                android:text="Sách Nói Thịnh Hành"
                 android:textColor="#0C1D37"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <!-- Best Seller Slider Carousel -->
             <androidx.recyclerview.widget.RecyclerView
@@ -216,7 +268,7 @@
                 android:layout_gravity="center_horizontal"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingHorizontal="16dp" />
+                android:paddingHorizontal="8dp" />
 
             <!-- Categories Horizontal scrolling chips -->
             <LinearLayout
@@ -340,7 +392,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="12 Sách Nói Dành Cho Bạn"
+                android:text="Sách Nói Dành Cho Bạn"
                 android:textColor="#0C1D37"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -350,6 +402,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
                 android:text="Phù hợp với người mới – bấm để nghe ngay"
                 android:textColor="#757575"
                 android:textSize="13sp" />
@@ -359,7 +412,7 @@
                 android:id="@+id/rvBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:clipToPadding="false"
@@ -368,12 +421,13 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (Elevated white layout) -->
     <LinearLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="64dp"
         android:background="#FFFFFF"
+        android:elevation="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -390,14 +444,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📖"
-                android:textSize="18sp"/>
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sách"
                 android:textColor="#FF7043"
                 android:textStyle="bold"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
 
@@ -414,13 +468,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="🔍"
-                android:textSize="18sp"/>
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Khám phá"
                 android:textColor="#7E8A9A"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
 
@@ -437,13 +491,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="🏳️"
-                android:textSize="18sp"/>
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thử thách"
                 android:textColor="#7E8A9A"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
 
@@ -460,15 +514,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📚"
-                android:textSize="18sp"/>
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thư viện"
                 android:textColor="#7E8A9A"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Floating Mini Player -->
+    <include layout="@layout/layout_mini_player" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

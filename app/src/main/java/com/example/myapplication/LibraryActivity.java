@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.controller.FonosApiManager;
 import com.example.myapplication.model.Book;
 import com.example.myapplication.utils.SupabaseConfig;
+import com.example.myapplication.utils.MiniPlayerController;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +31,7 @@ public class LibraryActivity extends AppCompatActivity {
     private LinearLayout layoutEmptyState;
     private LibraryAdapter libraryAdapter;
     private List<Book> bookList;
+    private MiniPlayerController miniPlayerController;
 
     private enum LibTab {
         RECENT, FAVORITES
@@ -96,6 +98,9 @@ public class LibraryActivity extends AppCompatActivity {
 
         setupBottomNavigation();
         switchTab(LibTab.RECENT);
+
+        miniPlayerController = new MiniPlayerController(this);
+        miniPlayerController.init();
     }
 
     private void switchTab(LibTab tab) {
@@ -261,5 +266,21 @@ public class LibraryActivity extends AppCompatActivity {
         findViewById(R.id.navLibrary).setOnClickListener(v -> {
             // Đã ở trang thư viện
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStart();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStop();
+        }
     }
 }

@@ -21,11 +21,20 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import com.example.myapplication.PlayerActivity;
 import com.example.myapplication.R;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import androidx.annotation.NonNull;
+
 public class AudioPlayerService extends Service {
 
     public static final String ACTION_PLAY_NEW = "PLAY_NEW";
     public static final String ACTION_TOGGLE = "TOGGLE";
     public static final String ACTION_STOP = "STOP";
+    public static final String ACTION_REWIND = "REWIND";
+    public static final String ACTION_FORWARD = "FORWARD";
 
     public static final String EXTRA_AUDIO_URL = "audio_url";
     public static final String EXTRA_BOOK_ID = "book_id";
@@ -45,12 +54,59 @@ public class AudioPlayerService extends Service {
     private String currentAuthor = "Fonos GR5";
     private String currentBookId = "";
     private String currentCoverUrl = "";
+    private String currentStatus = "Đang chuẩn bị phát...";
+    private Bitmap currentCoverBitmap = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
         mediaSession = new MediaSessionCompat(this, "AudioPlayerService");
+        mediaSession.setCallback(new MediaSessionCompat.Callback() {
+            @Override
+            public void onPlay() {
+                togglePlayPause();
+            }
+
+            @Override
+            public void onPause() {
+                togglePlayPause();
+            }
+
+            @Override
+            public void onStop() {
+                stopAudioAndService();
+            }
+
+            @Override
+            public void onSeekTo(long pos) {
+                seekTo((int) pos);
+            }
+
+            @Override
+            public void onRewind() {
+                seekTo(Math.max(0, getCurrentPosition() - 5000));
+                updateNotification(currentStatus);
+            }
+
+            @Override
+            public void onFastForward() {
+                seekTo(Math.min(getDuration(), getCurrentPosition() + 5000));
+                updateNotification(currentStatus);
+            }
+
+            @Override
+            public void onSkipToPrevious() {
+                seekTo(Math.max(0, getCurrentPosition() - 5000));
+                updateNotification(currentStatus);
+            }
+
+            @Override
+            public void onSkipToNext() {
+                seekTo(Math.min(getDuration(), getCurrentPosition() + 5000));
+                updateNotification(currentStatus);
+            }
+        });
     }
 
     @Override
@@ -72,6 +128,9 @@ public class AudioPlayerService extends Service {
             if (currentTitle == null) currentTitle = "Đang nghe sách";
             if (currentAuthor == null) currentAuthor = "Fonos GR5";
 
+            currentCoverBitmap = null;
+            loadCoverBitmap();
+
             startForeground(NOTIFICATION_ID, buildNotification("Đang chuẩn bị audio..."));
             playNewAudio(audioUrl);
         }
@@ -84,7 +143,36 @@ public class AudioPlayerService extends Service {
             stopAudioAndService();
         }
 
+        if (ACTION_REWIND.equals(action)) {
+            seekTo(Math.max(0, getCurrentPosition() - 5000));
+            updateNotification(currentStatus);
+        }
+
+        if (ACTION_FORWARD.equals(action)) {
+            seekTo(Math.min(getDuration(), getCurrentPosition() + 5000));
+            updateNotification(currentStatus);
+        }
+
         return START_STICKY;
+    }
+
+    private void loadCoverBitmap() {
+        if (currentCoverUrl != null && !currentCoverUrl.isEmpty()) {
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(currentCoverUrl)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            currentCoverBitmap = resource;
+                            updateNotification(currentStatus);
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
+        }
     }
 
     private void updateMediaSessionState() {
@@ -92,15 +180,27 @@ public class AudioPlayerService extends Service {
 
         MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, currentTitle)
-                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, currentAuthor);
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, currentAuthor)
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getDuration());
+
+        if (currentCoverBitmap != null) {
+            metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, currentCoverBitmap);
+        }
         mediaSession.setMetadata(metadataBuilder.build());
 
-        long actions = PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_STOP;
+        long actions = PlaybackStateCompat.ACTION_PLAY 
+                | PlaybackStateCompat.ACTION_PAUSE 
+                | PlaybackStateCompat.ACTION_STOP
+                | PlaybackStateCompat.ACTION_SEEK_TO
+                | PlaybackStateCompat.ACTION_REWIND
+                | PlaybackStateCompat.ACTION_FAST_FORWARD
+                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                | PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
         int state = isPlaying ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED;
 
         PlaybackStateCompat playbackState = new PlaybackStateCompat.Builder()
                 .setActions(actions)
-                .setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1.0f)
+                .setState(state, getCurrentPosition(), 1.0f)
                 .build();
 
         mediaSession.setPlaybackState(playbackState);
@@ -108,6 +208,7 @@ public class AudioPlayerService extends Service {
     }
 
     private void playNewAudio(String audioUrl) {
+        android.util.Log.d("AudioPlayerService", "playNewAudio called with URL: " + audioUrl);
         releasePlayer();
 
         try {
@@ -123,6 +224,7 @@ public class AudioPlayerService extends Service {
             mediaPlayer.setDataSource(audioUrl);
 
             mediaPlayer.setOnPreparedListener(mp -> {
+                android.util.Log.d("AudioPlayerService", "MediaPlayer is prepared, starting playback");
                 isPrepared = true;
                 mp.start();
                 isPlaying = true;
@@ -131,14 +233,25 @@ public class AudioPlayerService extends Service {
             });
 
             mediaPlayer.setOnCompletionListener(mp -> {
+                android.util.Log.d("AudioPlayerService", "MediaPlayer completed playback");
                 isPlaying = false;
                 updateMediaSessionState();
                 updateNotification("Đã phát xong");
             });
 
+            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+                android.util.Log.e("AudioPlayerService", "MediaPlayer error: what = " + what + ", extra = " + extra);
+                isPrepared = false;
+                isPlaying = false;
+                updateMediaSessionState();
+                updateNotification("Lỗi phát nhạc (code " + what + ")");
+                return true;
+            });
+
             mediaPlayer.prepareAsync();
 
         } catch (Exception e) {
+            android.util.Log.e("AudioPlayerService", "Exception playing audio: " + e.getMessage(), e);
             isPlaying = false;
             updateMediaSessionState();
             updateNotification("Không mở được audio");
@@ -168,6 +281,7 @@ public class AudioPlayerService extends Service {
     }
 
     private void updateNotification(String status) {
+        this.currentStatus = status;
         NotificationManager manager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -177,6 +291,7 @@ public class AudioPlayerService extends Service {
     }
 
     private Notification buildNotification(String status) {
+        this.currentStatus = status;
         Intent openPlayerIntent = new Intent(this, PlayerActivity.class);
         openPlayerIntent.putExtra("book_id", currentBookId);
         openPlayerIntent.putExtra("title", currentTitle);
@@ -204,24 +319,45 @@ public class AudioPlayerService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
+        PendingIntent rewindPendingIntent = PendingIntent.getService(
+                this,
+                4,
+                new Intent(this, AudioPlayerService.class).setAction(ACTION_REWIND),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        PendingIntent forwardPendingIntent = PendingIntent.getService(
+                this,
+                5,
+                new Intent(this, AudioPlayerService.class).setAction(ACTION_FORWARD),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
         String toggleText = isPlaying ? "Pause" : "Play";
         int toggleIcon = isPlaying
                 ? android.R.drawable.ic_media_pause
                 : android.R.drawable.ic_media_play;
 
-        return new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(currentTitle)
                 .setContentText(status + " • " + currentAuthor)
                 .setContentIntent(openPlayerPendingIntent)
                 .setOnlyAlertOnce(true)
                 .setOngoing(isPlaying)
+                .addAction(android.R.drawable.ic_media_rew, "Rewind", rewindPendingIntent)
                 .addAction(toggleIcon, toggleText, togglePendingIntent)
+                .addAction(android.R.drawable.ic_media_ff, "Forward", forwardPendingIntent)
                 .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", stopPendingIntent)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSession.getSessionToken())
-                        .setShowActionsInCompactView(0, 1))
-                .build();
+                        .setShowActionsInCompactView(0, 1, 2));
+
+        if (currentCoverBitmap != null) {
+            builder.setLargeIcon(currentCoverBitmap);
+        }
+
+        return builder.build();
     }
 
     private void createNotificationChannel() {
@@ -270,9 +406,62 @@ public class AudioPlayerService extends Service {
         super.onDestroy();
     }
 
+    public class LocalBinder extends android.os.Binder {
+        public AudioPlayerService getService() {
+            return AudioPlayerService.this;
+        }
+    }
+
+    private final IBinder binder = new LocalBinder();
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
+    }
+
+    public int getDuration() {
+        if (mediaPlayer != null && isPrepared) {
+            return mediaPlayer.getDuration();
+        }
+        return 0;
+    }
+
+    public int getCurrentPosition() {
+        if (mediaPlayer != null && isPrepared) {
+            return mediaPlayer.getCurrentPosition();
+        }
+        return 0;
+    }
+
+    public void seekTo(int positionMs) {
+        if (mediaPlayer != null && isPrepared) {
+            mediaPlayer.seekTo(positionMs);
+            updateMediaSessionState();
+        }
+    }
+
+    public boolean isPrepared() {
+        return isPrepared;
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public String getCurrentTitle() {
+        return currentTitle;
+    }
+
+    public String getCurrentAuthor() {
+        return currentAuthor;
+    }
+
+    public String getCurrentBookId() {
+        return currentBookId;
+    }
+
+    public String getCurrentCoverUrl() {
+        return currentCoverUrl;
     }
 }

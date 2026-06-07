@@ -5,14 +5,14 @@
     android:layout_height="320dp"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="16dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Cover Image -->
         <ImageView
             android:id="@+id/imgBestSellerCover"
             android:layout_width="match_parent"
@@ -20,18 +20,26 @@
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_report_image" />
 
+        <!-- Gradient Overlay -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@drawable/gradient_card_overlay"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Star Badge -->
         <LinearLayout
             android:id="@+id/badgeBestSeller"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="#E53935"
+            android:layout_margin="12dp"
+            android:background="@drawable/button_gradient"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="12dp"
@@ -43,25 +51,60 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="BÁN CHẠY NHẤT"
+                android:text="BÁN CHẠY"
                 android:textColor="@android:color/white"
                 android:textSize="10sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Book Text Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="14dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnPlay"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tvBestSellerTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="Book Title"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvBestSellerAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Author Name"
+                android:textColor="#CBD5E1"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Play Button -->
         <ImageView
             android:id="@+id/btnPlay"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@android:drawable/btn_default"
-            android:backgroundTint="#FF7043"
+            android:background="@drawable/circle_background"
             android:padding="12dp"
             android:src="@android:drawable/ic_media_play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@android:color/white" />
+            app:tint="#FF7043" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

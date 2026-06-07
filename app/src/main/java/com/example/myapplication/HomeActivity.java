@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.model.Book;
 import com.example.myapplication.controller.FonosApiManager;
 import com.example.myapplication.utils.SupabaseConfig;
+import com.example.myapplication.utils.MiniPlayerController;
 
 import com.bumptech.glide.Glide;
 import org.json.JSONArray;
@@ -46,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
     private View indicatorAudiobooks, indicatorEbook, indicatorSummary;
     private TextView tvBestSellersHeader, tvBooksForYouTitle, tvBooksForYouSubtitle;
     private View layoutCategories;
+    private MiniPlayerController miniPlayerController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +131,8 @@ public class HomeActivity extends AppCompatActivity {
             switchTab(TabState.AUDIOBOOKS);
         }
 
-        loadBestSellerBook();
-        loadBooksPaged();
+        miniPlayerController = new MiniPlayerController(this);
+        miniPlayerController.init();
     }
 
     private void switchTab(TabState state) {
@@ -172,7 +174,10 @@ public class HomeActivity extends AppCompatActivity {
                     indicatorAudiobooks.setVisibility(View.VISIBLE);
                 }
                 
-                if (tvBestSellersHeader != null) tvBestSellersHeader.setVisibility(View.GONE);
+                if (tvBestSellersHeader != null) {
+                    tvBestSellersHeader.setText("Sách Nói Thịnh Hành");
+                    tvBestSellersHeader.setVisibility(View.VISIBLE);
+                }
                 if (layoutCategories != null) layoutCategories.setVisibility(View.GONE);
                 
                 if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText(R.string.books_for_you_title);
@@ -217,6 +222,22 @@ public class HomeActivity extends AppCompatActivity {
                 if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Nắm trọn ý chính trong 10 phút");
                 break;
         }
+
+        resetAndReloadData();
+    }
+
+    private void resetAndReloadData() {
+        bookList.clear();
+        bestSellerList.clear();
+        bookAdapter.notifyDataSetChanged();
+        bestSellerAdapter.notifyDataSetChanged();
+
+        currentOffset = 0;
+        isLastPage = false;
+        isLoading = false;
+
+        loadBestSellerBook();
+        loadBooksPaged();
     }
 
     private void openBookDetail(Book book) {
@@ -240,7 +261,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadBestSellerBook() {
-        apiManager.getBestSellerBooks(token, 5, new FonosApiManager.ApiCallback() {
+        FonosApiManager.ApiCallback callback = new FonosApiManager.ApiCallback() {
             @Override
             public void onSuccess(String responseBody) {
                 try {
@@ -276,7 +297,13 @@ public class HomeActivity extends AppCompatActivity {
             public void onError(String errorMessage) {
                 Toast.makeText(HomeActivity.this, "Không tải được bestseller", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+
+        if (currentTab == TabState.AUDIOBOOKS) {
+            apiManager.getAudioBestSellerBooks(token, 5, callback);
+        } else {
+            apiManager.getBestSellerBooks(token, 5, callback);
+        }
     }
 
     private void loadBooksPaged() {
@@ -284,7 +311,7 @@ public class HomeActivity extends AppCompatActivity {
 
         isLoading = true;
 
-        apiManager.getBooksPaged(token, PAGE_SIZE, currentOffset, new FonosApiManager.ApiCallback() {
+        FonosApiManager.ApiCallback callback = new FonosApiManager.ApiCallback() {
             @Override
             public void onSuccess(String responseBody) {
                 try {
@@ -328,7 +355,13 @@ public class HomeActivity extends AppCompatActivity {
                 isLoading = false;
                 Toast.makeText(HomeActivity.this, "Không tải được sách", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+
+        if (currentTab == TabState.AUDIOBOOKS) {
+            apiManager.getAudioBooksPaged(token, PAGE_SIZE, currentOffset, callback);
+        } else {
+            apiManager.getBooksPaged(token, PAGE_SIZE, currentOffset, callback);
+        }
     }
 
     private void setupBottomNavigation() {
@@ -353,5 +386,21 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, LibraryActivity.class));
             finish();
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStart();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStop();
+        }
     }
 }

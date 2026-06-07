@@ -6,8 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.myapplication.utils.MiniPlayerController;
 
 public class ChallengeActivity extends AppCompatActivity {
+
+    private MiniPlayerController miniPlayerController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,9 @@ public class ChallengeActivity extends AppCompatActivity {
         }
 
         setupBottomNavigation();
+
+        miniPlayerController = new MiniPlayerController(this);
+        miniPlayerController.init();
     }
 
     private void setupBottomNavigation() {
@@ -49,5 +55,21 @@ public class ChallengeActivity extends AppCompatActivity {
             startActivity(new Intent(this, LibraryActivity.class));
             finish();
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStart();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (miniPlayerController != null) {
+            miniPlayerController.onStop();
+        }
     }
 }

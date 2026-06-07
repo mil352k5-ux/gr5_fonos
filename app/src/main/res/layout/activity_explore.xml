@@ -82,7 +82,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/white_top_rounded"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintBottom_toTopOf="@+id/mini_player_container"
         app:layout_constraintTop_toBottomOf="@+id/search_bar_container">
 
         <LinearLayout
@@ -674,5 +674,8 @@
                 android:layout_marginTop="2dp" />
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Floating Mini Player -->
+    <include layout="@layout/layout_mini_player" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

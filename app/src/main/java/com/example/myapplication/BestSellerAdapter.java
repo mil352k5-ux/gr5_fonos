@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,13 @@ public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.Be
     public void onBindViewHolder(@NonNull BestSellerViewHolder holder, int position) {
         Book book = bestSellers.get(position);
 
+        if (holder.tvTitle != null) {
+            holder.tvTitle.setText(book.getTitle());
+        }
+        if (holder.tvAuthor != null) {
+            holder.tvAuthor.setText(book.getAuthor());
+        }
+
         Glide.with(holder.itemView.getContext())
                 .load(book.getCoverUrl())
                 .placeholder(android.R.drawable.ic_menu_report_image)
@@ -59,10 +67,13 @@ public class BestSellerAdapter extends RecyclerView.Adapter<BestSellerAdapter.Be
 
     public static class BestSellerViewHolder extends RecyclerView.ViewHolder {
         ImageView imgCover;
+        TextView tvTitle, tvAuthor;
 
         public BestSellerViewHolder(@NonNull View itemView) {
             super(itemView);
             imgCover = itemView.findViewById(R.id.imgBestSellerCover);
+            tvTitle = itemView.findViewById(R.id.tvBestSellerTitle);
+            tvAuthor = itemView.findViewById(R.id.tvBestSellerAuthor);
         }
     }
 }
