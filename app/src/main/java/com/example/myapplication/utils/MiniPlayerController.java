@@ -35,8 +35,8 @@ public class MiniPlayerController {
         @Override
         public void run() {
             if (isBound && audioService != null && audioService.isPrepared()) {
-                updateProgress();
-                updatePlayPauseIcon();
+                capNhatThoiGianThanhTienTrinhMini();
+                capNhatIconNutPlayPauseMini();
                 if (miniPlayerContainer.getVisibility() == View.GONE) {
                     miniPlayerContainer.setVisibility(View.VISIBLE);
                 }
@@ -81,7 +81,7 @@ public class MiniPlayerController {
             btnMiniPlayPause.setOnClickListener(v -> {
                 if (isBound && audioService != null && audioService.isPrepared()) {
                     audioService.startService(new Intent(activity, AudioPlayerService.class).setAction(AudioPlayerService.ACTION_TOGGLE));
-                    handler.postDelayed(this::updatePlayPauseIcon, 100);
+                    handler.postDelayed(this::capNhatIconNutPlayPauseMini, 100);
                 }
             });
         }
@@ -115,18 +115,18 @@ public class MiniPlayerController {
     public void onStart() {
         if (miniPlayerContainer == null) return;
         Intent intent = new Intent(activity, AudioPlayerService.class);
-        activity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        activity.bindService(intent, lienKetVoiServiceTrinhPhatMini, Context.BIND_AUTO_CREATE);
     }
 
     public void onStop() {
         handler.removeCallbacks(progressRunnable);
         if (isBound) {
-            activity.unbindService(serviceConnection);
+            activity.unbindService(lienKetVoiServiceTrinhPhatMini);
             isBound = false;
         }
     }
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection lienKetVoiServiceTrinhPhatMini = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
@@ -158,7 +158,7 @@ public class MiniPlayerController {
         if (tvMiniTitle != null) tvMiniTitle.setText(audioService.getCurrentTitle());
         if (tvMiniAuthor != null) tvMiniAuthor.setText(audioService.getCurrentAuthor());
 
-        updatePlayPauseIcon();
+        capNhatIconNutPlayPauseMini();
 
         if (imgMiniCover != null) {
             Glide.with(activity)
@@ -167,10 +167,10 @@ public class MiniPlayerController {
                     .into(imgMiniCover);
         }
 
-        updateProgress();
+        capNhatThoiGianThanhTienTrinhMini();
     }
 
-    private void updatePlayPauseIcon() {
+    private void capNhatIconNutPlayPauseMini() {
         if (btnMiniPlayPause != null && audioService != null) {
             if (audioService.isPlaying()) {
                 btnMiniPlayPause.setImageResource(android.R.drawable.ic_media_pause);
@@ -180,7 +180,7 @@ public class MiniPlayerController {
         }
     }
 
-    private void updateProgress() {
+    private void capNhatThoiGianThanhTienTrinhMini() {
         if (isBound && audioService != null && audioService.isPrepared()) {
             int duration = audioService.getDuration();
             int current = audioService.getCurrentPosition();

@@ -117,13 +117,13 @@ public class EbookReaderActivity extends AppCompatActivity {
 
                     if (isAtBottom && !hasNotifiedChapterFinished) {
                         hasNotifiedChapterFinished = true;
-                        sendChapterFinishedBroadcast(bookTitle);
+                        phatTinHieuDocXongChuongSach(bookTitle);
                     }
                 }
         );
     }
 
-    private void sendChapterFinishedBroadcast(String bookTitle) {
+    private void phatTinHieuDocXongChuongSach(String bookTitle) {
         Intent intent = new Intent(this, ChapterFinishedReceiver.class);
         intent.setAction(ACTION_CHAPTER_FINISHED);
         intent.putExtra("chapter_name", "chương trong sách \"" + bookTitle + "\"");

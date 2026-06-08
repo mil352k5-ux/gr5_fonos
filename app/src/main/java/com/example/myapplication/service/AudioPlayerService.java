@@ -65,17 +65,17 @@ public class AudioPlayerService extends Service {
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public void onPlay() {
-                togglePlayPause();
+                chuyenTrangThaiPhatTamDung();
             }
 
             @Override
             public void onPause() {
-                togglePlayPause();
+                chuyenTrangThaiPhatTamDung();
             }
 
             @Override
             public void onStop() {
-                stopAudioAndService();
+                dungPhatVaTatServiceNgam();
             }
 
             @Override
@@ -131,16 +131,16 @@ public class AudioPlayerService extends Service {
             currentCoverBitmap = null;
             loadCoverBitmap();
 
-            startForeground(NOTIFICATION_ID, buildNotification("Đang chuẩn bị audio..."));
-            playNewAudio(audioUrl);
+            startForeground(NOTIFICATION_ID, taoGiaoDienNotificationMedia("Đang chuẩn bị audio..."));
+            phatNhacMoiChuanBiNgam(audioUrl);
         }
 
         if (ACTION_TOGGLE.equals(action)) {
-            togglePlayPause();
+            chuyenTrangThaiPhatTamDung();
         }
 
         if (ACTION_STOP.equals(action)) {
-            stopAudioAndService();
+            dungPhatVaTatServiceNgam();
         }
 
         if (ACTION_REWIND.equals(action)) {
@@ -175,7 +175,7 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void updateMediaSessionState() {
+    private void dongBoTrangThaiLenHeThong() {
         if (mediaSession == null) return;
 
         MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder()
@@ -207,9 +207,9 @@ public class AudioPlayerService extends Service {
         mediaSession.setActive(true);
     }
 
-    private void playNewAudio(String audioUrl) {
+    private void phatNhacMoiChuanBiNgam(String audioUrl) {
         android.util.Log.d("AudioPlayerService", "playNewAudio called with URL: " + audioUrl);
-        releasePlayer();
+        giaiPhongBoNhoTrinhPhat();
 
         try {
             mediaPlayer = new MediaPlayer();
@@ -228,14 +228,14 @@ public class AudioPlayerService extends Service {
                 isPrepared = true;
                 mp.start();
                 isPlaying = true;
-                updateMediaSessionState();
+                dongBoTrangThaiLenHeThong();
                 updateNotification("Đang phát");
             });
 
             mediaPlayer.setOnCompletionListener(mp -> {
                 android.util.Log.d("AudioPlayerService", "MediaPlayer completed playback");
                 isPlaying = false;
-                updateMediaSessionState();
+                dongBoTrangThaiLenHeThong();
                 updateNotification("Đã phát xong");
             });
 
@@ -243,7 +243,7 @@ public class AudioPlayerService extends Service {
                 android.util.Log.e("AudioPlayerService", "MediaPlayer error: what = " + what + ", extra = " + extra);
                 isPrepared = false;
                 isPlaying = false;
-                updateMediaSessionState();
+                dongBoTrangThaiLenHeThong();
                 updateNotification("Lỗi phát nhạc (code " + what + ")");
                 return true;
             });
@@ -253,29 +253,29 @@ public class AudioPlayerService extends Service {
         } catch (Exception e) {
             android.util.Log.e("AudioPlayerService", "Exception playing audio: " + e.getMessage(), e);
             isPlaying = false;
-            updateMediaSessionState();
+            dongBoTrangThaiLenHeThong();
             updateNotification("Không mở được audio");
         }
     }
 
-    private void togglePlayPause() {
+    private void chuyenTrangThaiPhatTamDung() {
         if (mediaPlayer == null || !isPrepared) return;
 
         if (isPlaying) {
             mediaPlayer.pause();
             isPlaying = false;
-            updateMediaSessionState();
+            dongBoTrangThaiLenHeThong();
             updateNotification("Đang tạm dừng");
         } else {
             mediaPlayer.start();
             isPlaying = true;
-            updateMediaSessionState();
+            dongBoTrangThaiLenHeThong();
             updateNotification("Đang phát");
         }
     }
 
-    private void stopAudioAndService() {
-        releasePlayer();
+    private void dungPhatVaTatServiceNgam() {
+        giaiPhongBoNhoTrinhPhat();
         stopForeground(true);
         stopSelf();
     }
@@ -286,11 +286,11 @@ public class AudioPlayerService extends Service {
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         if (manager != null) {
-            manager.notify(NOTIFICATION_ID, buildNotification(status));
+            manager.notify(NOTIFICATION_ID, taoGiaoDienNotificationMedia(status));
         }
     }
 
-    private Notification buildNotification(String status) {
+    private Notification taoGiaoDienNotificationMedia(String status) {
         this.currentStatus = status;
         Intent openPlayerIntent = new Intent(this, PlayerActivity.class);
         openPlayerIntent.putExtra("book_id", currentBookId);
@@ -376,7 +376,7 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void releasePlayer() {
+    private void giaiPhongBoNhoTrinhPhat() {
         if (mediaPlayer != null) {
             try {
                 if (mediaPlayer.isPlaying()) {
@@ -398,7 +398,7 @@ public class AudioPlayerService extends Service {
 
     @Override
     public void onDestroy() {
-        releasePlayer();
+        giaiPhongBoNhoTrinhPhat();
         if (mediaSession != null) {
             mediaSession.setActive(false);
             mediaSession.release();
@@ -437,7 +437,7 @@ public class AudioPlayerService extends Service {
     public void seekTo(int positionMs) {
         if (mediaPlayer != null && isPrepared) {
             mediaPlayer.seekTo(positionMs);
-            updateMediaSessionState();
+            dongBoTrangThaiLenHeThong();
         }
     }
 

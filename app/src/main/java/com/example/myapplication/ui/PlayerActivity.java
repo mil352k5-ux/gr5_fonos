@@ -136,7 +136,7 @@ public class PlayerActivity extends AppCompatActivity {
             if (isBound && audioService != null && audioService.isPrepared()) {
                 int current = audioService.getCurrentPosition();
                 audioService.seekTo(Math.max(0, current - 5000));
-                updatePlaybackProgressUI();
+                capNhatThoiGianSeekbarGiaoDien();
             } else {
                 Toast.makeText(this, "Audio chưa sẵn sàng", Toast.LENGTH_SHORT).show();
             }
@@ -147,7 +147,7 @@ public class PlayerActivity extends AppCompatActivity {
                 int current = audioService.getCurrentPosition();
                 int total = audioService.getDuration();
                 audioService.seekTo(Math.min(total, current + 5000));
-                updatePlaybackProgressUI();
+                capNhatThoiGianSeekbarGiaoDien();
             } else {
                 Toast.makeText(this, "Audio chưa sẵn sàng", Toast.LENGTH_SHORT).show();
             }
@@ -186,7 +186,12 @@ public class PlayerActivity extends AppCompatActivity {
         loadFirstChapter();
     }
 
-    private void loadFirstChapter() {
+    private void loadFirstChapter() { // Keep loadFirstChapter as taiDuLieuChuongDauTienDePhat
+        // Let's change this call:
+        taiDuLieuChuongDauTienDePhat();
+    }
+
+    private void taiDuLieuChuongDauTienDePhat() {
         apiManager.getFirstChapterByBookId(bookId, new FonosApiManager.ApiCallback() {
             @Override
             public void onSuccess(String responseBody) {
@@ -218,7 +223,7 @@ public class PlayerActivity extends AppCompatActivity {
                     }
 
                     tvPlayerStatus.setText(chapterTitle);
-                    startAudioService(currentAudioUrl);
+                    khoiDongPhatNhacServiceNgam(currentAudioUrl);
 
                 } catch (Exception e) {
                     tvPlayerStatus.setText("Lỗi đọc dữ liệu audio");
@@ -232,7 +237,7 @@ public class PlayerActivity extends AppCompatActivity {
         });
     }
 
-    private void startAudioService(String audioUrl) {
+    private void khoiDongPhatNhacServiceNgam(String audioUrl) {
         Intent intent = new Intent(this, AudioPlayerService.class);
 
         intent.setAction(AudioPlayerService.ACTION_PLAY_NEW);
@@ -252,20 +257,20 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Intent intent = new Intent(this, AudioPlayerService.class);
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+        bindService(intent, ketNoiDongBoVoiServiceTrinhPhat, BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         if (isBound) {
-            unbindService(serviceConnection);
+            unbindService(ketNoiDongBoVoiServiceTrinhPhat);
             isBound = false;
         }
         progressHandler.removeCallbacks(progressRunnable);
     }
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection ketNoiDongBoVoiServiceTrinhPhat = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
@@ -288,7 +293,7 @@ public class PlayerActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (isBound && audioService != null && audioService.isPrepared()) {
-                    updatePlaybackProgressUI();
+                    capNhatThoiGianSeekbarGiaoDien();
                 }
                 progressHandler.postDelayed(this, 1000);
             }
@@ -296,7 +301,7 @@ public class PlayerActivity extends AppCompatActivity {
         progressHandler.post(progressRunnable);
     }
 
-    private void updatePlaybackProgressUI() {
+    private void capNhatThoiGianSeekbarGiaoDien() {
         if (audioService == null) return;
         
         int current = audioService.getCurrentPosition();
