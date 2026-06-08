@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.model.Book;
 import com.example.myapplication.controller.FonosApiManager;
 import com.example.myapplication.utils.SupabaseConfig;
 import com.example.myapplication.utils.MiniPlayerController;
+import com.example.myapplication.adapter.BookAdapter;
+import com.example.myapplication.adapter.BestSellerAdapter;
 
 import com.bumptech.glide.Glide;
 import org.json.JSONArray;
@@ -81,8 +84,6 @@ public class HomeActivity extends AppCompatActivity {
         rvBestSellers.setAdapter(bestSellerAdapter);
 
         new LinearSnapHelper().attachToRecyclerView(rvBestSellers);
-
-
 
         View profileIcon = findViewById(R.id.profile_icon);
         if (profileIcon != null) {

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,10 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.controller.FonosApiManager;
 import com.example.myapplication.model.Book;
 import com.example.myapplication.utils.SupabaseConfig;
 import com.example.myapplication.utils.MiniPlayerController;
+import com.example.myapplication.adapter.LibraryAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

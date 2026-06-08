@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -7,13 +7,15 @@ import android.widget.Toast;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
+import com.example.myapplication.ui.EbookReaderActivity;
+import com.example.myapplication.ui.PlayerActivity;
 import com.bumptech.glide.Glide;
 
 public class BookDetailActivity extends AppCompatActivity {
 
     private ImageView imgBookCover;
     private TextView tvBookTitle, tvBookAuthor, tvBookDescription, tvBookCategory, tvListenNow, tvBack;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

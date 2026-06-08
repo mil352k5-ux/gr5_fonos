@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+
+import com.example.myapplication.R;
+import com.example.myapplication.utils.NotificationHelper;
+import com.example.myapplication.receiver.ChapterFinishedReceiver;
 
 public class EbookReaderActivity extends AppCompatActivity {
 

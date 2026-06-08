@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import com.example.myapplication.model.Book;
 
 import java.util.List;
 import com.bumptech.glide.Glide;
+
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
     private List<Book> books;
@@ -21,6 +22,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     public interface OnBookClickListener {
         void onBookClick(Book book);
     }
+
     public BookAdapter(List<Book> books, OnBookClickListener listener) {
         this.books = books;
         this.listener = listener;

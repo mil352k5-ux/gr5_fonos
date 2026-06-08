@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.R;
 import com.example.myapplication.service.AudioPlayerService;
 import com.example.myapplication.controller.FonosApiManager;
 
@@ -118,7 +119,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         // Update skip labels to 5s
         tvRewind15.setText("↺5");
-        tvForward30.setText("5↻");
+        tvForward30.setText("5Request");
 
         tvPlayPause.setOnClickListener(v -> {
             if (currentAudioUrl == null || currentAudioUrl.isEmpty()) {

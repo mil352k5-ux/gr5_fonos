@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.example.myapplication.controller.FonosApiManager;
 
 import org.json.JSONObject;

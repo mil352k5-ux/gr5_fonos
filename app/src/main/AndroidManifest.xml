@@ -22,11 +22,11 @@
             android:foregroundServiceType="mediaPlayback" />
 
         <receiver
-            android:name=".ChapterFinishedReceiver"
+            android:name=".receiver.ChapterFinishedReceiver"
             android:exported="false" />
 
         <receiver
-            android:name=".BatteryLowReceiver"
+            android:name=".receiver.BatteryLowReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_LOW" />
@@ -34,7 +34,7 @@
         </receiver>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,15 +43,15 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="false" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".ExploreActivity" />
-        <activity android:name=".LibraryActivity" />
-        <activity android:name=".ChallengeActivity" />
-        <activity android:name=".BookDetailActivity" />
-        <activity android:name=".PlayerActivity" />
-        <activity android:name=".EbookReaderActivity" />
+        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.ExploreActivity" />
+        <activity android:name=".ui.LibraryActivity" />
+        <activity android:name=".ui.ChallengeActivity" />
+        <activity android:name=".ui.BookDetailActivity" />
+        <activity android:name=".ui.PlayerActivity" />
+        <activity android:name=".ui.EbookReaderActivity" />
 
     </application>
 

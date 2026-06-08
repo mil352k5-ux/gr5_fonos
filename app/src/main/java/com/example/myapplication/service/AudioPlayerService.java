@@ -18,7 +18,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
-import com.example.myapplication.PlayerActivity;
+import com.example.myapplication.ui.PlayerActivity;
 import com.example.myapplication.R;
 
 import com.bumptech.glide.Glide;
