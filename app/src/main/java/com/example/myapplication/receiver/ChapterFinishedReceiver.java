@@ -11,16 +11,26 @@ public class ChapterFinishedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String chapterName = intent.getStringExtra("chapter_name");
+        String title = intent.getStringExtra("notification_title");
+        String body = intent.getStringExtra("notification_body");
 
         if (chapterName == null || chapterName.isEmpty()) {
             chapterName = "chương hiện tại";
         }
 
+        if (title == null || title.isEmpty()) {
+            title = "Đã đọc hết chương";
+        }
+
+        if (body == null || body.isEmpty()) {
+            body = "Bạn đã đọc hết " + chapterName;
+        }
+
         NotificationHelper.showNotification(
                 context,
                 1001,
-                "Đã đọc hết chương",
-                "Bạn đã đọc hết " + chapterName
+                title,
+                body
         );
     }
 }

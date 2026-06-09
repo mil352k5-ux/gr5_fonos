@@ -98,6 +98,14 @@ public class LibraryActivity extends AppCompatActivity {
             tabFavorites.setOnClickListener(v -> switchTab(LibTab.FAVORITES));
         }
 
+        View profileIcon = findViewById(R.id.profile_icon);
+        if (profileIcon != null) {
+            profileIcon.setOnClickListener(v -> {
+                Intent intent = new Intent(LibraryActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            });
+        }
+
         setupBottomNavigation();
         switchTab(LibTab.RECENT);
 
@@ -199,54 +207,44 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     private void loadLibraryBooks() {
-        apiManager.getBooks(SupabaseConfig.SUPABASE_KEY, new FonosApiManager.ApiCallback() {
-            @Override
-            public void onSuccess(String responseBody) {
-                if (activeTab != LibTab.RECENT) return;
+        bookList.clear();
+        SharedPreferences recentsPref = getSharedPreferences("FonosRecents", MODE_PRIVATE);
+        String recentBooksJson = recentsPref.getString("recent_books", "[]");
 
-                try {
-                    JSONArray array = new JSONArray(responseBody);
-                    bookList.clear();
-
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject obj = array.getJSONObject(i);
-                        Book book = new Book(
-                                obj.optString("id", ""),
-                                obj.optString("title", "No title"),
-                                obj.optString("author", "Unknown author"),
-                                obj.optString("narrator", "Fonos Voice"),
-                                obj.optString("description", ""),
-                                obj.optString("category", "General"),
-                                obj.optString("cover_url", ""),
-                                obj.optInt("total_duration", 0),
-                                obj.optBoolean("is_premium", false)
-                        );
-                        bookList.add(book);
-                    }
-
-                    libraryAdapter.notifyDataSetChanged();
-
-                    if (bookList.isEmpty()) {
-                        layoutEmptyState.setVisibility(View.VISIBLE);
-                        rvLibraryBooks.setVisibility(View.GONE);
-                    } else {
-                        layoutEmptyState.setVisibility(View.GONE);
-                        rvLibraryBooks.setVisibility(View.VISIBLE);
-                    }
-
-                } catch (Exception e) {
-                    layoutEmptyState.setVisibility(View.VISIBLE);
-                    rvLibraryBooks.setVisibility(View.GONE);
-                }
+        try {
+            JSONArray array = new JSONArray(recentBooksJson);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                Book book = new Book(
+                        obj.optString("id", ""),
+                        obj.optString("title", "No title"),
+                        obj.optString("author", "Unknown author"),
+                        obj.optString("narrator", "Fonos Voice"),
+                        obj.optString("description", ""),
+                        obj.optString("category", "General"),
+                        obj.optString("cover_url", ""),
+                        obj.optInt("total_duration", 0),
+                        obj.optBoolean("is_premium", false)
+                );
+                bookList.add(book);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onError(String errorMessage) {
-                if (activeTab != LibTab.RECENT) return;
-                layoutEmptyState.setVisibility(View.VISIBLE);
-                rvLibraryBooks.setVisibility(View.GONE);
-            }
-        });
+        libraryAdapter.notifyDataSetChanged();
+
+        if (tvLibraryTitle != null) {
+            tvLibraryTitle.setText("Gần đây");
+        }
+
+        if (bookList.isEmpty()) {
+            layoutEmptyState.setVisibility(View.VISIBLE);
+            rvLibraryBooks.setVisibility(View.GONE);
+        } else {
+            layoutEmptyState.setVisibility(View.GONE);
+            rvLibraryBooks.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupBottomNavigation() {

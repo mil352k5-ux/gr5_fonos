@@ -52,6 +52,8 @@
         <activity android:name=".ui.BookDetailActivity" />
         <activity android:name=".ui.PlayerActivity" />
         <activity android:name=".ui.EbookReaderActivity" />
+        <activity android:name=".ui.SearchAndCategoryActivity" />
+        <activity android:name=".ui.ProfileActivity" />
 
     </application>
 

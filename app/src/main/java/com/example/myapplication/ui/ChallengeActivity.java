@@ -29,7 +29,10 @@ public class ChallengeActivity extends AppCompatActivity {
 
         View profileIcon = findViewById(R.id.profile_icon);
         if (profileIcon != null) {
-            profileIcon.setOnClickListener(v -> Toast.makeText(this, "Mở trang hồ sơ cá nhân", Toast.LENGTH_SHORT).show());
+            profileIcon.setOnClickListener(v -> {
+                Intent intent = new Intent(ChallengeActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            });
         }
 
         setupBottomNavigation();

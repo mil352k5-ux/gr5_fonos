@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        android:fitsSystemWindows="true"
         android:background="@android:color/transparent">
 
         <LinearLayout
@@ -265,7 +266,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -289,7 +294,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -313,9 +322,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackground">
 
                 <TextView
+                    android:id="@+id/tvSpeedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1.0x"

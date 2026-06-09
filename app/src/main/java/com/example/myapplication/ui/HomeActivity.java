@@ -51,26 +51,27 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tvBestSellersHeader, tvBooksForYouTitle, tvBooksForYouSubtitle;
     private View layoutCategories;
     private MiniPlayerController miniPlayerController;
+    private View cardWelcomeBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        super.onCreate(savedInstanceState);// hàm gốc chạy android
+        setContentView(R.layout.activity_home);// khởi chạy giao diện
 
-        apiManager = new FonosApiManager(this);
+        apiManager = new FonosApiManager(this); //Tạo đối tượng gọi Supabase
 
-        rvBooks = findViewById(R.id.rvBooks);
-        rvBestSellers = findViewById(R.id.rvBestSellers);
+        rvBooks = findViewById(R.id.rvBooks);// ánh xạ danh sách chỉ hiện 12 sách
+        rvBestSellers = findViewById(R.id.rvBestSellers);// sách thịnh hành
 
-        bookList = new ArrayList<>();
+        bookList = new ArrayList<>(); // tạo list rỗng
         bestSellerList = new ArrayList<>();
 
-        bookAdapter = new BookAdapter(bookList, book -> {
+        bookAdapter = new BookAdapter(bookList, book -> { //tạo adapter, mỗi item trong danh sách
             openBookDetail(book);
         });
 
         bestSellerAdapter = new BestSellerAdapter(bestSellerList, book -> {
-            openBookDetail(book);
+            openBookDetail(book);// tương tự
         });
 
         LinearLayoutManager layoutManager =
@@ -87,10 +88,14 @@ public class HomeActivity extends AppCompatActivity {
 
         View profileIcon = findViewById(R.id.profile_icon);
         if (profileIcon != null) {
-            profileIcon.setOnClickListener(v ->
-                    Toast.makeText(HomeActivity.this, "Mở trang cá nhân", Toast.LENGTH_SHORT).show()
-            );
+            profileIcon.setOnClickListener(v -> {
+                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            });
         }
+
+        // Bind category chips clicks
+        setupCategoryChips();
 
         // Bind Tab Views
         tabAudiobooksContainer = findViewById(R.id.tab_audiobooks_container);
@@ -109,6 +114,7 @@ public class HomeActivity extends AppCompatActivity {
         tvBooksForYouTitle = findViewById(R.id.tvBooksForYouTitle);
         tvBooksForYouSubtitle = findViewById(R.id.tvBooksForYouSubtitle);
         layoutCategories = findViewById(R.id.layoutCategories);
+        cardWelcomeBanner = findViewById(R.id.cardWelcomeBanner);
 
         if (tabAudiobooksContainer != null) {
             tabAudiobooksContainer.setOnClickListener(v -> switchTab(TabState.AUDIOBOOKS));
@@ -180,6 +186,7 @@ public class HomeActivity extends AppCompatActivity {
                     tvBestSellersHeader.setVisibility(View.VISIBLE);
                 }
                 if (layoutCategories != null) layoutCategories.setVisibility(View.GONE);
+                if (cardWelcomeBanner != null) cardWelcomeBanner.setVisibility(View.VISIBLE);
                 
                 if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText(R.string.books_for_you_title);
                 if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText(R.string.books_for_you_subtitle);
@@ -199,6 +206,7 @@ public class HomeActivity extends AppCompatActivity {
                     tvBestSellersHeader.setVisibility(View.VISIBLE);
                 }
                 if (layoutCategories != null) layoutCategories.setVisibility(View.VISIBLE);
+                if (cardWelcomeBanner != null) cardWelcomeBanner.setVisibility(View.GONE);
                 
                 if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText("Ebook Dành Cho Bạn");
                 if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Đọc sách mọi lúc mọi nơi – bấm để đọc ngay");
@@ -218,6 +226,7 @@ public class HomeActivity extends AppCompatActivity {
                     tvBestSellersHeader.setVisibility(View.VISIBLE);
                 }
                 if (layoutCategories != null) layoutCategories.setVisibility(View.VISIBLE);
+                if (cardWelcomeBanner != null) cardWelcomeBanner.setVisibility(View.GONE);
                 
                 if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText("Tóm Tắt Sách Cho Bạn");
                 if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Nắm trọn ý chính trong 10 phút");
@@ -239,6 +248,32 @@ public class HomeActivity extends AppCompatActivity {
 
         loadBestSellerBook();
         loadBooksPaged();
+    }
+
+    private void setupCategoryChips() {
+        View chipKyNang = findViewById(R.id.chipKyNang);
+        if (chipKyNang != null) chipKyNang.setOnClickListener(v -> openCategory("Kỹ năng"));
+
+        View chipTuDuy = findViewById(R.id.chipTuDuy);
+        if (chipTuDuy != null) chipTuDuy.setOnClickListener(v -> openCategory("Tư duy"));
+
+        View chipVanHoc = findViewById(R.id.chipVanHoc);
+        if (chipVanHoc != null) chipVanHoc.setOnClickListener(v -> openCategory("Văn học"));
+
+        View chipNuoiDayCon = findViewById(R.id.chipNuoiDayCon);
+        if (chipNuoiDayCon != null) chipNuoiDayCon.setOnClickListener(v -> openCategory("Nuôi dạy con"));
+
+        View chipThieuNhi = findViewById(R.id.chipThieuNhi);
+        if (chipThieuNhi != null) chipThieuNhi.setOnClickListener(v -> openCategory("Thiếu nhi"));
+
+        View chipKinhDoanh = findViewById(R.id.chipKinhDoanh);
+        if (chipKinhDoanh != null) chipKinhDoanh.setOnClickListener(v -> openCategory("Kinh doanh"));
+    }
+
+    private void openCategory(String categoryName) {
+        Intent intent = new Intent(HomeActivity.this, SearchAndCategoryActivity.class);
+        intent.putExtra("category_filter", categoryName);
+        startActivity(intent);
     }
 
     private void openBookDetail(Book book) {

@@ -41,6 +41,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("FonosSession", MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("is_logged_in", false)) {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
 
         etEmailUsername = findViewById(R.id.etEmailUsername);

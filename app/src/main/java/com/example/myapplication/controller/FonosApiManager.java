@@ -311,6 +311,180 @@ public class FonosApiManager {
         sendRequest(request, callback);
     }
 
+    public void searchBooks(String query, ApiCallback callback) {
+        try {
+            String safeQuery = java.net.URLEncoder.encode("*" + query + "*", "UTF-8");
+            String url = SupabaseConfig.SUPABASE_URL 
+                    + "/rest/v1/books"
+                    + "?select=*"
+                    + "&or=(title.ilike." + safeQuery + ",author.ilike." + safeQuery + ",category.ilike." + safeQuery + ")";
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                    .addHeader("Authorization", "Bearer " + SupabaseConfig.SUPABASE_KEY)
+                    .get()
+                    .build();
+
+            sendRequest(request, callback);
+        } catch (Exception e) {
+            callback.onError(e.getMessage());
+        }
+    }
+
+    public void getBooksByCategory(String category, ApiCallback callback) {
+        try {
+            String safeCategory = java.net.URLEncoder.encode("*" + category + "*", "UTF-8");
+            String url = SupabaseConfig.SUPABASE_URL
+                    + "/rest/v1/books"
+                    + "?select=*"
+                    + "&category=ilike." + safeCategory;
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                    .addHeader("Authorization", "Bearer " + SupabaseConfig.SUPABASE_KEY)
+                    .get()
+                    .build();
+
+            sendRequest(request, callback);
+        } catch (Exception e) {
+            callback.onError(e.getMessage());
+        }
+    }
+
+    public void getProfile(String token, String userId, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/profiles"
+                + "?select=*"
+                + "&id=eq." + userId;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                .addHeader("Authorization", "Bearer " + token)
+                .get()
+                .build();
+
+        sendRequest(request, callback);
+    }
+
+    public void updateProfile(String token, String userId, String fullName, String avatarUrl, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/profiles"
+                + "?id=eq." + userId;
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("full_name", fullName);
+            json.put("avatar_url", avatarUrl);
+
+            RequestBody body = RequestBody.create(
+                    json.toString(),
+                    MediaType.parse("application/json")
+            );
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                    .addHeader("Authorization", "Bearer " + token)
+                    .addHeader("Content-Type", "application/json")
+                    .patch(body)
+                    .build();
+
+            sendRequest(request, callback);
+        } catch (Exception e) {
+            callback.onError(e.getMessage());
+        }
+    }
+
+    public void insertProfile(String token, String userId, String email, String fullName, String avatarUrl, String provider, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL + "/rest/v1/profiles";
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("id", userId);
+            json.put("email", email);
+            json.put("full_name", fullName);
+            json.put("avatar_url", avatarUrl);
+            json.put("provider", provider);
+
+            RequestBody body = RequestBody.create(
+                    json.toString(),
+                    MediaType.parse("application/json")
+            );
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                    .addHeader("Authorization", "Bearer " + token)
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Prefer", "return=minimal")
+                    .post(body)
+                    .build();
+
+            sendRequest(request, callback);
+        } catch (Exception e) {
+            callback.onError(e.getMessage());
+        }
+    }
+
+    public void refreshSession(String refreshToken, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token";
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("refresh_token", refreshToken);
+
+            RequestBody body = RequestBody.create(
+                    json.toString(),
+                    MediaType.parse("application/json")
+            );
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                    .addHeader("Content-Type", "application/json")
+                    .post(body)
+                    .build();
+
+            sendRequest(request, callback);
+        } catch (Exception e) {
+            callback.onError(e.getMessage());
+        }
+    }
+
+    public void getChaptersByBookId(String bookId, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/audio_chapters?select=*"
+                + "&book_id=eq." + bookId
+                + "&order=chapter_number.asc";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                .addHeader("Authorization", "Bearer " + SupabaseConfig.SUPABASE_KEY)
+                .get()
+                .build();
+
+        sendRequest(request, callback);
+    }
+
+    public void getBookTotalDuration(String bookId, ApiCallback callback) {
+        String url = SupabaseConfig.SUPABASE_URL
+                + "/rest/v1/books?select=total_duration&id=eq." + bookId;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("apikey", SupabaseConfig.SUPABASE_KEY)
+                .addHeader("Authorization", "Bearer " + SupabaseConfig.SUPABASE_KEY)
+                .get()
+                .build();
+
+        sendRequest(request, callback);
+    }
+
+
     private void sendRequest(Request request, ApiCallback callback) {
         client.newCall(request).enqueue(new Callback() {
             @Override

@@ -2,6 +2,7 @@ package com.example.myapplication.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -36,6 +37,60 @@ public class ExploreActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        // Other Category Cards
+        findViewById(R.id.cardPodCourse).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
+            intent.putExtra("category_filter", "PodCourse");
+            startActivity(intent);
+        });
+
+        findViewById(R.id.cardEnglishBooks).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
+            intent.putExtra("category_filter", "Sách Tiếng Anh");
+            startActivity(intent);
+        });
+
+        findViewById(R.id.cardMeditation).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
+            intent.putExtra("category_filter", "Thiền");
+            startActivity(intent);
+        });
+
+        findViewById(R.id.cardSleepMusic).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
+            intent.putExtra("category_filter", "Truyện Ngủ");
+            startActivity(intent);
+        });
+
+        findViewById(R.id.cardPodcast).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
+            intent.putExtra("category_filter", "Podcast");
+            startActivity(intent);
+        });
+
+        // Search Edit Text
+        android.widget.EditText etSearch = findViewById(R.id.etSearch);
+        if (etSearch != null) {
+            etSearch.setOnEditorActionListener((view, actionId, event) -> {
+                String query = etSearch.getText().toString().trim();
+                if (!query.isEmpty()) {
+                    Intent intent = new Intent(ExploreActivity.this, SearchAndCategoryActivity.class);
+                    intent.putExtra("search_query", query);
+                    startActivity(intent);
+                }
+                return true;
+            });
+        }
+
+        // Profile Icon click
+        View profileIcon = findViewById(R.id.profile_icon);
+        if (profileIcon != null) {
+            profileIcon.setOnClickListener(v -> {
+                Intent intent = new Intent(ExploreActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            });
+        }
 
         setupBottomNavigation();
 

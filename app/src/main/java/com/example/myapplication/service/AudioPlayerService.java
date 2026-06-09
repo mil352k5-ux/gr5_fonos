@@ -56,6 +56,7 @@ public class AudioPlayerService extends Service {
     private String currentCoverUrl = "";
     private String currentStatus = "Đang chuẩn bị phát...";
     private Bitmap currentCoverBitmap = null;
+    private String currentAudioUrl = "";
 
     @Override
     public void onCreate() {
@@ -119,6 +120,7 @@ public class AudioPlayerService extends Service {
 
         if (ACTION_PLAY_NEW.equals(action)) {
             String audioUrl = intent.getStringExtra(EXTRA_AUDIO_URL);
+            int seekToPos = intent.getIntExtra("seek_to_position", 0);
 
             currentBookId = intent.getStringExtra(EXTRA_BOOK_ID);
             currentTitle = intent.getStringExtra(EXTRA_TITLE);
@@ -132,7 +134,7 @@ public class AudioPlayerService extends Service {
             loadCoverBitmap();
 
             startForeground(NOTIFICATION_ID, taoGiaoDienNotificationMedia("Đang chuẩn bị audio..."));
-            phatNhacMoiChuanBiNgam(audioUrl);
+            phatNhacMoiChuanBiNgam(audioUrl, seekToPos);
         }
 
         if (ACTION_TOGGLE.equals(action)) {
@@ -207,8 +209,9 @@ public class AudioPlayerService extends Service {
         mediaSession.setActive(true);
     }
 
-    private void phatNhacMoiChuanBiNgam(String audioUrl) {
-        android.util.Log.d("AudioPlayerService", "playNewAudio called with URL: " + audioUrl);
+    private void phatNhacMoiChuanBiNgam(String audioUrl, int seekToPos) {
+        android.util.Log.d("AudioPlayerService", "playNewAudio called with URL: " + audioUrl + ", seekToPos: " + seekToPos);
+        this.currentAudioUrl = audioUrl;
         giaiPhongBoNhoTrinhPhat();
 
         try {
@@ -226,6 +229,9 @@ public class AudioPlayerService extends Service {
             mediaPlayer.setOnPreparedListener(mp -> {
                 android.util.Log.d("AudioPlayerService", "MediaPlayer is prepared, starting playback");
                 isPrepared = true;
+                if (seekToPos > 0) {
+                    mp.seekTo(seekToPos);
+                }
                 mp.start();
                 isPlaying = true;
                 dongBoTrangThaiLenHeThong();
@@ -237,6 +243,12 @@ public class AudioPlayerService extends Service {
                 isPlaying = false;
                 dongBoTrangThaiLenHeThong();
                 updateNotification("Đã phát xong");
+
+                // Gửi broadcast thông báo nghe xong chương sách
+                Intent finishedIntent = new Intent(this, com.example.myapplication.receiver.ChapterFinishedReceiver.class);
+                finishedIntent.putExtra("notification_title", "Đã nghe hết chương");
+                finishedIntent.putExtra("notification_body", "Bạn đã nghe hết sách \"" + currentTitle + "\"");
+                sendBroadcast(finishedIntent);
             });
 
             mediaPlayer.setOnErrorListener((mp, what, extra) -> {
@@ -441,6 +453,33 @@ public class AudioPlayerService extends Service {
         }
     }
 
+    public void setPlaybackSpeed(float speed) {
+        if (mediaPlayer != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                boolean wasPlaying = mediaPlayer.isPlaying();
+                android.media.PlaybackParams params = mediaPlayer.getPlaybackParams();
+                params.setSpeed(speed);
+                mediaPlayer.setPlaybackParams(params);
+                if (!wasPlaying) {
+                    mediaPlayer.pause();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public float getPlaybackSpeed() {
+        if (mediaPlayer != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isPrepared) {
+            try {
+                return mediaPlayer.getPlaybackParams().getSpeed();
+            } catch (Exception e) {
+                return 1.0f;
+            }
+        }
+        return 1.0f;
+    }
+
     public boolean isPrepared() {
         return isPrepared;
     }
@@ -463,5 +502,9 @@ public class AudioPlayerService extends Service {
 
     public String getCurrentCoverUrl() {
         return currentCoverUrl;
+    }
+
+    public String getCurrentAudioUrl() {
+        return currentAudioUrl;
     }
 }

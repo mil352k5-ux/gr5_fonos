@@ -471,81 +471,203 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- REVIEW LIST ITEM -->
-            <LinearLayout
+            <!-- WRITE A REVIEW CARD -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvWriteReview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/bg_review_card"
-                android:orientation="vertical"
-                android:padding="16dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="@drawable/circle_background"
-                        android:gravity="center"
-                        android:text="👨‍🚀"
-                        android:textSize="20sp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Viết nhận xét &amp; đánh giá của bạn"
+                        android:textColor="#142B4A"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Custom Star Selection -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+                        
+                        <TextView
+                            android:id="@+id/tvStar1"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:text="☆"
+                            android:textColor="#FFB300"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:clickable="true"
+                            android:focusable="true" />
+                        <TextView
+                            android:id="@+id/tvStar2"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:text="☆"
+                            android:textColor="#FFB300"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:clickable="true"
+                            android:focusable="true" />
+                        <TextView
+                            android:id="@+id/tvStar3"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:text="☆"
+                            android:textColor="#FFB300"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:clickable="true"
+                            android:focusable="true" />
+                        <TextView
+                            android:id="@+id/tvStar4"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:text="☆"
+                            android:textColor="#FFB300"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:clickable="true"
+                            android:focusable="true" />
+                        <TextView
+                            android:id="@+id/tvStar5"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:text="☆"
+                            android:textColor="#FFB300"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etReviewContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="80dp"
+                        android:background="@drawable/edit_text_rounded_light"
+                        android:hint="Chia sẻ cảm nghĩ của bạn về cuốn sách này..."
+                        android:textColorHint="#94A3B8"
+                        android:textColor="#142B4A"
+                        android:textSize="13sp"
+                        android:gravity="top|start"
+                        android:padding="10dp"
+                        android:inputType="textMultiLine"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btnSubmitReview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="end"
+                        android:background="@drawable/button_rounded_orange"
+                        android:text="Gửi đánh giá"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:paddingHorizontal="16dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- CONTAINER FOR DYNAMIC REVIEWS -->
+            <LinearLayout
+                android:id="@+id/llReviewsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- INITIAL HARDCODED REVIEW -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_review_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/circle_background"
+                            android:gravity="center"
+                            android:text="👨‍🚀"
+                            android:textSize="20sp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Đạt"
+                                android:textColor="#142B4A"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4 năm trước"
+                                android:textColor="#7E8A9A"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đạt"
-                            android:textColor="#142B4A"
-                            android:textSize="14sp"
+                            android:text="⭐ 5/5"
+                            android:textColor="#FFB300"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4 năm trước"
-                            android:textColor="#7E8A9A"
-                            android:textSize="11sp" />
+                            android:layout_marginStart="8dp"
+                            android:text="Rất hay"
+                            android:textColor="#142B4A"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Sách nói rất bổ ích, giọng đọc diễn cảm, dễ nghe và dễ ngấm."
+                        android:textColor="#4A5F7A"
+                        android:textSize="13sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⭐ 5/5"
-                        android:textColor="#FFB300"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Rất hay"
-                        android:textColor="#142B4A"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Sách nói rất bổ ích, giọng đọc diễn cảm, dễ nghe và dễ ngấm."
-                    android:textColor="#4A5F7A"
-                    android:textSize="13sp" />
             </LinearLayout>
 
         </LinearLayout>
