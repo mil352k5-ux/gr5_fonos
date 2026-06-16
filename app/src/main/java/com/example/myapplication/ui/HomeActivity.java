@@ -41,13 +41,13 @@ public class HomeActivity extends AppCompatActivity {
     private boolean isLastPage = false;
 
     private enum TabState {
-        AUDIOBOOKS, EBOOKS, SUMMARY
+        AUDIOBOOKS, EBOOKS
     }
     private TabState currentTab = TabState.AUDIOBOOKS;
 
-    private View tabAudiobooksContainer, tabEbookContainer, tabSummaryContainer;
-    private TextView tvTabAudiobooks, tvTabEbook, tvTabSummary;
-    private View indicatorAudiobooks, indicatorEbook, indicatorSummary;
+    private View tabAudiobooksContainer, tabEbookContainer;
+    private TextView tvTabAudiobooks, tvTabEbook;
+    private View indicatorAudiobooks, indicatorEbook;
     private TextView tvBestSellersHeader, tvBooksForYouTitle, tvBooksForYouSubtitle;
     private View layoutCategories;
     private MiniPlayerController miniPlayerController;
@@ -60,13 +60,13 @@ public class HomeActivity extends AppCompatActivity {
 
         apiManager = new FonosApiManager(this); //Tạo đối tượng gọi Supabase
 
-        rvBooks = findViewById(R.id.rvBooks);// ánh xạ danh sách chỉ hiện 12 sách
+        rvBooks = findViewById(R.id.rvBooks);// ánh xạ danh sách
         rvBestSellers = findViewById(R.id.rvBestSellers);// sách thịnh hành
 
         bookList = new ArrayList<>(); // tạo list rỗng
         bestSellerList = new ArrayList<>();
 
-        bookAdapter = new BookAdapter(bookList, book -> { //tạo adapter, mỗi item trong danh sách
+        bookAdapter = new BookAdapter(bookList, book -> { //tạo adapter, mỗi item trong danh sách rvBooks sẽ gọi tk book detail
             openBookDetail(book);
         });
 
@@ -94,21 +94,17 @@ public class HomeActivity extends AppCompatActivity {
             });
         }
 
-        // Bind category chips clicks
+        // Gọi hàm gắn sự kiện cho các chip category
         setupCategoryChips();
 
-        // Bind Tab Views
         tabAudiobooksContainer = findViewById(R.id.tab_audiobooks_container);
         tabEbookContainer = findViewById(R.id.tab_ebook_container);
-        tabSummaryContainer = findViewById(R.id.tab_summary_container);
 
         tvTabAudiobooks = findViewById(R.id.tvTabAudiobooks);
         tvTabEbook = findViewById(R.id.tvTabEbook);
-        tvTabSummary = findViewById(R.id.tvTabSummary);
 
         indicatorAudiobooks = findViewById(R.id.indicator_audiobooks);
         indicatorEbook = findViewById(R.id.indicator_ebook);
-        indicatorSummary = findViewById(R.id.indicator_summary);
 
         tvBestSellersHeader = findViewById(R.id.tvBestSellersHeader);
         tvBooksForYouTitle = findViewById(R.id.tvBooksForYouTitle);
@@ -122,22 +118,19 @@ public class HomeActivity extends AppCompatActivity {
         if (tabEbookContainer != null) {
             tabEbookContainer.setOnClickListener(v -> switchTab(TabState.EBOOKS));
         }
-        if (tabSummaryContainer != null) {
-            tabSummaryContainer.setOnClickListener(v -> switchTab(TabState.SUMMARY));
-        }
+
 
         setupBottomNavigation();
 
-        // Check if there is an intent to open a specific tab
+        // Lấy dữ liệu initial_tab từ Intent nếu Activity khác gửi sang.
         String initialTab = getIntent().getStringExtra("initial_tab");
         if ("ebook".equals(initialTab)) {
             switchTab(TabState.EBOOKS);
-        } else if ("summary".equals(initialTab)) {
-            switchTab(TabState.SUMMARY);
+
         } else {
             switchTab(TabState.AUDIOBOOKS);
         }
-
+// tạo Mini player dùng để hiển thị thanh nghe nhỏ nếu service audio đang phát.
         miniPlayerController = new MiniPlayerController(this);
         miniPlayerController.init();
     }
@@ -162,13 +155,7 @@ public class HomeActivity extends AppCompatActivity {
             indicatorEbook.setVisibility(View.INVISIBLE);
         }
 
-        if (tvTabSummary != null) {
-            tvTabSummary.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            tvTabSummary.setTypeface(null, android.graphics.Typeface.NORMAL);
-        }
-        if (indicatorSummary != null) {
-            indicatorSummary.setVisibility(View.INVISIBLE);
-        }
+
 
         // Apply selected styling and update UI titles/sections
         switch (state) {
@@ -212,27 +199,9 @@ public class HomeActivity extends AppCompatActivity {
                 if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Đọc sách mọi lúc mọi nơi – bấm để đọc ngay");
                 break;
 
-            case SUMMARY:
-                if (tvTabSummary != null) {
-                    tvTabSummary.setTextColor(getResources().getColor(android.R.color.black));
-                    tvTabSummary.setTypeface(null, android.graphics.Typeface.BOLD);
-                }
-                if (indicatorSummary != null) {
-                    indicatorSummary.setVisibility(View.VISIBLE);
-                }
-                
-                if (tvBestSellersHeader != null) {
-                    tvBestSellersHeader.setText("Top Tóm Tắt Thịnh Hành");
-                    tvBestSellersHeader.setVisibility(View.VISIBLE);
-                }
-                if (layoutCategories != null) layoutCategories.setVisibility(View.VISIBLE);
-                if (cardWelcomeBanner != null) cardWelcomeBanner.setVisibility(View.GONE);
-                
-                if (tvBooksForYouTitle != null) tvBooksForYouTitle.setText("Tóm Tắt Sách Cho Bạn");
-                if (tvBooksForYouSubtitle != null) tvBooksForYouSubtitle.setText("Nắm trọn ý chính trong 10 phút");
-                break;
-        }
 
+        }
+// Mỗi lần đổi tab thì xóa data cũ và tải data mới
         resetAndReloadData();
     }
 
@@ -287,8 +256,6 @@ public class HomeActivity extends AppCompatActivity {
         
         if (currentTab == TabState.EBOOKS) {
             intent.putExtra("book_type", "ebook");
-        } else if (currentTab == TabState.SUMMARY) {
-            intent.putExtra("book_type", "summary");
         } else {
             intent.putExtra("book_type", "audiobook");
         }
@@ -410,13 +377,7 @@ public class HomeActivity extends AppCompatActivity {
             finish();
         });
 
-        View navChallenge = findViewById(R.id.navChallenge);
-        if (navChallenge != null) {
-            navChallenge.setOnClickListener(v -> {
-                startActivity(new Intent(this, ChallengeActivity.class));
-                finish();
-            });
-        }
+
 
         findViewById(R.id.navLibrary).setOnClickListener(v -> {
             startActivity(new Intent(this, LibraryActivity.class));

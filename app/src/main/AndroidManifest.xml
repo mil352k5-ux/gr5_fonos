@@ -48,7 +48,7 @@
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.ExploreActivity" />
         <activity android:name=".ui.LibraryActivity" />
-        <activity android:name=".ui.ChallengeActivity" />
+
         <activity android:name=".ui.BookDetailActivity" />
         <activity android:name=".ui.PlayerActivity" />
         <activity android:name=".ui.EbookReaderActivity" />

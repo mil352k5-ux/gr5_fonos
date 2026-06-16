@@ -12,7 +12,7 @@ import com.example.myapplication.ui.EbookReaderActivity;
 import com.example.myapplication.ui.PlayerActivity;
 import com.bumptech.glide.Glide;
 
-public class BookDetailActivity extends AppCompatActivity {
+public class    BookDetailActivity extends AppCompatActivity {
 
     private ImageView imgBookCover;
     private TextView tvBookTitle, tvBookAuthor, tvBookDescription, tvBookCategory, tvListenNow, tvBack;

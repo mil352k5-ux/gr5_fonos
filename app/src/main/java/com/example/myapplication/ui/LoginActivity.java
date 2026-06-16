@@ -27,16 +27,15 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
-
+// biến đại diện cho giao diện
     private EditText etEmailUsername, etPassword;
     private Button btnLogin;
     private TextView tvSignUp;
-
     private Button btnGoogleLogin;
-    private GoogleSignInClient googleDoorClient;
-    private ActivityResultLauncher<Intent> googleDoorLauncher;
-
-    private FonosApiManager apiManager;
+// biến logic
+    private GoogleSignInClient googleDoorClient;// gọi SDK để tạo intent đăng nhaapja gg
+    private ActivityResultLauncher<Intent> googleDoorLauncher;// mở mh login gg và trả kết quả
+    private FonosApiManager apiManager;// gọi Supabase APi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +50,13 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
-
+// ánh xạ từ XML sang java để sử dụng nút và ô nhập
         etEmailUsername = findViewById(R.id.etEmailUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvSignUp = findViewById(R.id.tvSignUp);
 
-        apiManager = new FonosApiManager(this);
+        apiManager = new FonosApiManager(this);// ở đây class sẽ gọi API this = LoginActivity
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +72,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+// ánh xạ nút gg rồi cấu hình nút login
         btnGoogleLogin = findViewById(R.id.btnGoogleLogin);
-
         prepareGoogleLogin();
+
 
         btnGoogleLogin.setOnClickListener(v -> {
             googleDoorClient.signOut().addOnCompleteListener(task -> {
@@ -145,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveLoginSession(String accessToken, String refreshToken, String userId, String email) {
+        // mở kho session
         SharedPreferences sharedPreferences = getSharedPreferences("FonosSession", MODE_PRIVATE);
 
         sharedPreferences.edit()
@@ -168,10 +168,12 @@ public class LoginActivity extends AppCompatActivity {
         googleDoorLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                    // lấy dữ liệu gg trả về
                     Intent data = result.getData();
                     Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
                     try {
+                        // lấy tk gg và id token
                         GoogleSignInAccount account = task.getResult(ApiException.class);
                         String googleIdToken = account.getIdToken();
 
@@ -179,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(this, "Không lấy được Google ID Token", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
+// gửi qua supabase
                         loginSupabaseByGoogle(googleIdToken);
 
                     } catch (ApiException e) {
@@ -189,11 +191,11 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void loginSupabaseByGoogle(String googleIdToken) {
+    private void loginSupabaseByGoogle(String googleIdToken) {// nhận id token
         btnGoogleLogin.setEnabled(false);
         btnGoogleLogin.setText("Đang xác thực Google...");
-
-        apiManager.loginWithGoogleToken(googleIdToken, new FonosApiManager.ApiCallback() {
+// gửi chuỗi khóa googleIdToken lên supabase
+        apiManager.loginWithGoogleToken(googleIdToken, new FonosApiManager.ApiCallback() {// gửi sang supabase
             @Override
             public void onSuccess(String responseBody) {
                 btnGoogleLogin.setEnabled(true);

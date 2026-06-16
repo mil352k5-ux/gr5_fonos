@@ -258,10 +258,7 @@ public class LibraryActivity extends AppCompatActivity {
             finish();
         });
 
-        findViewById(R.id.navChallenge).setOnClickListener(v -> {
-            startActivity(new Intent(this, ChallengeActivity.class));
-            finish();
-        });
+
 
         findViewById(R.id.navLibrary).setOnClickListener(v -> {
             // Đã ở trang thư viện

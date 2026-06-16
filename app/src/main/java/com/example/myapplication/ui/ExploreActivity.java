@@ -31,41 +31,18 @@ public class ExploreActivity extends AppCompatActivity {
             finish();
         });
 
-        findViewById(R.id.cardSummary).setOnClickListener(v -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.putExtra("initial_tab", "summary");
-            startActivity(intent);
-            finish();
-        });
+
 
         // Other Category Cards
-        findViewById(R.id.cardPodCourse).setOnClickListener(v -> {
+        findViewById(R.id.cardBusiness).setOnClickListener(v -> {
             Intent intent = new Intent(this, SearchAndCategoryActivity.class);
-            intent.putExtra("category_filter", "PodCourse");
+            intent.putExtra("category_filter", "Kinh doanh");
             startActivity(intent);
         });
 
-        findViewById(R.id.cardEnglishBooks).setOnClickListener(v -> {
+        findViewById(R.id.cardSkills).setOnClickListener(v -> {
             Intent intent = new Intent(this, SearchAndCategoryActivity.class);
-            intent.putExtra("category_filter", "Sách Tiếng Anh");
-            startActivity(intent);
-        });
-
-        findViewById(R.id.cardMeditation).setOnClickListener(v -> {
-            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
-            intent.putExtra("category_filter", "Thiền");
-            startActivity(intent);
-        });
-
-        findViewById(R.id.cardSleepMusic).setOnClickListener(v -> {
-            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
-            intent.putExtra("category_filter", "Truyện Ngủ");
-            startActivity(intent);
-        });
-
-        findViewById(R.id.cardPodcast).setOnClickListener(v -> {
-            Intent intent = new Intent(this, SearchAndCategoryActivity.class);
-            intent.putExtra("category_filter", "Podcast");
+            intent.putExtra("category_filter", "Kỹ năng");
             startActivity(intent);
         });
 
@@ -108,10 +85,7 @@ public class ExploreActivity extends AppCompatActivity {
             // Đã ở trang khám phá
         });
 
-        findViewById(R.id.navChallenge).setOnClickListener(v -> {
-            startActivity(new Intent(this, ChallengeActivity.class));
-            finish();
-        });
+
 
         findViewById(R.id.navLibrary).setOnClickListener(v -> {
             startActivity(new Intent(this, LibraryActivity.class));

@@ -43,10 +43,12 @@ public class AudioPlayerService extends Service {
     public static final String EXTRA_COVER_URL = "cover_url";
 
     private static final String CHANNEL_ID = "fonos_audio_channel";
+    // mã kênh, từ A8 trở đi bắt buộc notification phải thuộc 1 channel
     private static final int NOTIFICATION_ID = 1001;
+    // update notification, dùng dể cập nhật noti cũ, không tạo mới
 
     private MediaSessionCompat mediaSession;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;// đối tg phát audio, nhận url mp3, prepare, start, pause, seek, stop
     private boolean isPrepared = false;
     private boolean isPlaying = false;
 
@@ -224,7 +226,7 @@ public class AudioPlayerService extends Service {
                             .build()
             );
 
-            mediaPlayer.setDataSource(audioUrl);
+            mediaPlayer.setDataSource(audioUrl);// gán nguồn từ Supabase
 
             mediaPlayer.setOnPreparedListener(mp -> {
                 android.util.Log.d("AudioPlayerService", "MediaPlayer is prepared, starting playback");

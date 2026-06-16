@@ -148,32 +148,6 @@
                 android:visibility="invisible" />
         </LinearLayout>
 
-        <!-- Tóm tắt sách Tab -->
-        <LinearLayout
-            android:id="@+id/tab_summary_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingVertical="8dp">
-            <TextView
-                android:id="@+id/tvTabSummary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tóm tắt sách"
-                android:textColor="#757575"
-                android:textSize="15sp" />
-            <View
-                android:id="@+id/indicator_summary"
-                android:layout_width="45dp"
-                android:layout_height="3dp"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/bg_tab_indicator"
-                android:visibility="invisible" />
-        </LinearLayout>
     </LinearLayout>
 
     <View
@@ -485,28 +459,6 @@
                 android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/navChallenge"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🏳️"
-                android:textSize="20sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thử thách"
-                android:textColor="#7E8A9A"
-                android:textSize="11sp"
-                android:layout_marginTop="2dp" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/navLibrary"
